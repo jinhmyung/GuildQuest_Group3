@@ -26,8 +26,6 @@ class GMAEEngine():
             print("2) Login user 1")
             print("3) Login user 2")
             print("4) Realms (list/create)") #should print error message if both user aren't logged in
-            # print("11) Save") we'll make it save automatically 
-            # print("12) Load") we'll make it load after user logins
             print("0) Exit")
             cmd = input("Choose: ").strip()
             if cmd == "1":
@@ -41,8 +39,8 @@ class GMAEEngine():
                 if login_result:
                     self.player2 = login_result
             elif cmd == "4":
-                return
-                # menu_realms()
+                
+                self.menu.show_options()
             elif cmd == "0":
                 print("Bye!")
                 return

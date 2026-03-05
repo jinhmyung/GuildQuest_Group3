@@ -27,6 +27,7 @@ class User():
         }
         with open(self.fileName, "w") as f:
             json.dump(data, f)
+        return True
         
     def login(self, username: str, password: str) -> int:
         with open(self.fileName, "r") as f:
