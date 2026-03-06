@@ -1,17 +1,21 @@
 import json
 import random
+import os #issues with finding the file on my side so had to os.getcwd()
 from profileManager import ProfileManager
 
 class User():
     def __init__(self, fileName = "user.json"):
         self.fileName = fileName
         self.profile_manager = ProfileManager()
+        self.JsonFilePath = os.path.join(os.getcwd(), fileName)
 
     def create_user(self, username: str, password: str) -> None:
         try:
-            with open(self.fileName, "r") as f:
+            
+            with open(self.JsonFilePath, "r") as f:
                 data = json.load(f)
         except (FileNotFoundError, json.JSONDecodeError):
+            print("unable to save user at this moment")
             data = {}
     
         if username in data:
@@ -25,12 +29,12 @@ class User():
             "profile_id": profile_id,
             "password": password
         }
-        with open(self.fileName, "w") as f:
+        with open(self.JsonFilePath, "w") as f:
             json.dump(data, f)
         return True
         
     def login(self, username: str, password: str) -> int:
-        with open(self.fileName, "r") as f:
+        with open(self.JsonFilePath, "r") as f:
             data = json.load(f)
             if username in data and data[username]["password"] == password:
                 print(username)
@@ -52,6 +56,7 @@ class User():
             if not login_result:
                 print("Invalid username or password.")
                 return False
+            
             else:
                 print("Login successful!")
                 return login_result

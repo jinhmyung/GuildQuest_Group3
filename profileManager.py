@@ -1,15 +1,17 @@
 import json
 from playerProfile import PlayerProfile
+import os
 
 class ProfileManager():
     def __init__(self, filename="profiles.json"):
-        self.filename = filename
+        self.filename = os.path.join(os.getcwd(), filename)
 
     #Load data from profile_id into PlayerProfile object and return it
     def load(self, profile_id:str):
         with open(self.filename, "r") as f:
             data = json.load(f)
             if profile_id in data:
+                print("loading ?")
                 profile = PlayerProfile(profile_id)
                 profile.from_dict(data[profile_id])
                 return profile

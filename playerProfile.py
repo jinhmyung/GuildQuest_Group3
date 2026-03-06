@@ -56,3 +56,6 @@ class PlayerProfile():
                 print("Invalid input. Please enter a number (1-3).")
         self.name = name
         self.char_class = classes[char_class]
+
+    def __str__(self):
+        return str(self.to_dict())
