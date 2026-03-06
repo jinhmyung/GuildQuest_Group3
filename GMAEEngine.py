@@ -40,7 +40,6 @@ class GMAEEngine():
             cmd = input("Choose: ").strip()
             if cmd in self.CmdSelection.keys():
                 self.CmdSelection[cmd]()
-            print(str(self.player1))
             
         print("Bye!")
     

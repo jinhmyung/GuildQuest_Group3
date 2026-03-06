@@ -11,7 +11,6 @@ class ProfileManager():
         with open(self.filename, "r") as f:
             data = json.load(f)
             if profile_id in data:
-                print("loading ?")
                 profile = PlayerProfile(profile_id)
                 profile.from_dict(data[profile_id])
                 return profile

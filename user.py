@@ -37,9 +37,9 @@ class User():
         with open(self.JsonFilePath, "r") as f:
             data = json.load(f)
             if username in data and data[username]["password"] == password:
-                print(username)
+                #print("Profile Username: " + username)
                 profile_id = data[username]["profile_id"]
-                print(profile_id)
+                #print("Profile ID" + profile_id)
                 return self.profile_manager.load(profile_id)
         return False
     
