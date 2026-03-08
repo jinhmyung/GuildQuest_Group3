@@ -6,9 +6,6 @@ class MiniAdventure(ABC):
         self.id = id
 
     @abstractmethod
-    def initialize(self): 
-        return
-    @abstractmethod
     def handle_input(self, player_input:str):
         return
     @abstractmethod
