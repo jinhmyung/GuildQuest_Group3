@@ -6,6 +6,9 @@ class MiniAdventure(ABC):
         self.id = id
 
     @abstractmethod
+    def initialize(self): 
+        return
+    @abstractmethod
     def handle_input(self, player_input:str):
         return
     @abstractmethod
@@ -23,4 +26,6 @@ class MiniAdventure(ABC):
     @abstractmethod
     def reset(self):
         return
-    
+        @abstractmethod
+    def start_adventure(self):
+        pass

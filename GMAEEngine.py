@@ -88,8 +88,11 @@ class GMAEEngine():
 
     def start_session(self):
         if self.player1 and self.player2:
+            # get the mini game option's ex Mobhunt/treasureTrap
             miniGames = self.menu.show_options()
+            # call the method in line 79 and pass in the mini game options to be printed also get user input and it's result
             result = self.PrintOptions(miniGames)
+            # create an instance of the chosen game pass in game name, player1, player2, some stringID this case doesn't matter. 
             self.menu.get_selections(miniGames[result], self.player1, self.player2, miniGames[result])
         
         return

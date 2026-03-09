@@ -21,11 +21,9 @@ class AdventureFactory():
         if name in self.registry:
             return self.registry[name](*args)
         return None
-
     
     def list_adventures(self) -> List[str]:
         return list(self.registry.keys())
-    
 
 class AdventureMenu():
     instance  = None            #re-used code from Nicol app.py singlton
@@ -44,6 +42,7 @@ class AdventureMenu():
     def show_options(self):
         return self.factory.list_adventures()
             
-    
+    # this one will make an instance of the chosen mini game and start the mini game by calling start_adventure()
     def get_selections(self, choice, *args):
+    # the args are player1 player2 and gameID not sure what that does. 
         self.factory.create(choice, *args).start_adventure()
