@@ -26,6 +26,7 @@ class MiniAdventure(ABC):
     @abstractmethod
     def reset(self):
         return
-        @abstractmethod
+    
+    @abstractmethod
     def start_adventure(self):
         pass

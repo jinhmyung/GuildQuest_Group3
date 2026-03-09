@@ -5,6 +5,7 @@ from profileManager import ProfileManager
 from gameSession import GameSession
 from playerProfile import PlayerProfile
 from user import User
+from RealmRegister import RealmRegister
 import time
 
 TEST_MODE = True
@@ -16,6 +17,9 @@ class GMAEEngine():
         self.menu = AdventureMenu()
         self.profile_manager = ProfileManager()
         self.session = Optional[GameSession]
+        self.realmReg = RealmRegister().realms
+
+
         
         # these are the user option are they are printed in lines 36 and 37
         self.printOptions = ["EXIT", "Create user", "Login user 1", "Login user 2", "Realms (list/create)" ]
@@ -26,7 +30,8 @@ class GMAEEngine():
             "2": self.login_Player1,
             "3": self.login_Player2,
             #"4": self.menu.show_options,
-            "4": self.start_session
+            # "4": self.start_session
+            "4": self.show_realms
         }
 
     def run(self):
@@ -92,10 +97,19 @@ class GMAEEngine():
             miniGames = self.menu.show_options()
             # call the method in line 79 and pass in the mini game options to be printed also get user input and it's result
             result = self.PrintOptions(miniGames)
+
             # create an instance of the chosen game pass in game name, player1, player2, some stringID this case doesn't matter. 
             self.menu.get_selections(miniGames[result], self.player1, self.player2, miniGames[result])
         
         return
+    
+    def show_realms(self): #default realms initialized in init RealmRegister
+        print("\n==============================")
+        print("Realms: \n")
+        for realm in self.realmReg.values():
+            print(f"Name: {realm.name} | Description: {realm.description} | Coord:{realm.x_coord},{realm.y_coord}")
+        print("==============================\n")
+
     
     def game_loop():
         return
