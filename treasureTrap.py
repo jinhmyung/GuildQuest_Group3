@@ -1,7 +1,7 @@
 # Treasure & Trap mini adventure2
 
 from miniAdventure import MiniAdventure
-from realm import Realm
+#from realm import Realm
 import random
 
 
@@ -94,8 +94,12 @@ class GridMapAdapter:
 
 
 class TreasureTrapAdventure(MiniAdventure):
+    # Nicol: I am calling makeing an instance of this in adventure.py's second class 
     def __init__(self, id: str):
         super().__init__(id)
         pass
 
+    def start_adventure(self):
+        # Nicol: please write all of your loop/player input code here see mobHunt for example
+        pass
 

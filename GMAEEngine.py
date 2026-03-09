@@ -23,7 +23,8 @@ class GMAEEngine():
             "1": self.UserManager.create_cli, 
             "2": self.login_Player1,
             "3": self.login_Player2,
-            "4": self.menu.show_options,
+            #"4": self.menu.show_options,
+            "4": self.start_session
         }
 
     def run(self):
@@ -62,8 +63,22 @@ class GMAEEngine():
     def login_Player2(self):
         self.player2 = self.login_attempt()
 
+    def PrintOptions(self, list_obj):
+        print(f"what would you like to do? (enter 0 to end) :") 
+        for num, obj in enumerate(list_obj):
+            print(f"{num} : {obj}")
+        
+        result = input().strip()
+        if result.isdigit() and int(result) < len(list_obj):
+            print(f"selected result {list_obj[int(result)]}")
+            return int(result)
 
-    def start_session(adventure_name: str, player1: PlayerProfile, player2: PlayerProfile):
+    def start_session(self):
+        if self.player1 and self.player2:
+            miniGames = self.menu.show_options()
+            result = self.PrintOptions(miniGames)
+            self.menu.get_selections(miniGames[result], self.player1, self.player2, miniGames[result])
+        
         return
     
     def game_loop():

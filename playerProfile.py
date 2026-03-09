@@ -21,15 +21,17 @@ class Adventurer(ABC):
     
     @staticmethod
     def from_dict(data):
-        classes = {"Mage":Mage, "Warrior":Mage, "Roge":Mage}
-        if isinstance(data, str):
-            ChildObj = classes[data]()
-            print("yes")
-        else: 
+        classes = {"Mage":Mage, "Warrior":Warrior, "Rogue":Rogue}
+        print(type(data))
+        if isinstance(data, dict):
             ChildObj = classes[data["name"]]()
-        
+        else: 
+            ChildObj = classes[data]()
+
         # we might care about these if attack or hp ever go up>
         """
+                if isinstance(data, str):
+            ChildObj = classes[data]()
         ChildObj.name = data.get("name", ChildObj.name)
         ChildObj.hp = data.get("hp", ChildObj.hp)
         ChildObj.attack = data.get("hp", ChildObj.attack)

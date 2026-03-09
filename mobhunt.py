@@ -87,8 +87,8 @@ class MobHunt(MiniAdventure):
         print("3. Special Attack")
         while True:
             choice = input("Enter your choice (1-3): ").strip()
-            if self.handle_input(player, choice):             
-                break
+            if choice in ["1", "2", "3"]:
+                self.handle_input(player, choice)         
             else:
                 print("Invalid choice. Please enter 1, 2, or 3.")
 
@@ -101,7 +101,8 @@ class MobHunt(MiniAdventure):
         print(f"{self.monster.name} attacks {target.name} for {damage} damage!")
         target.char_class.hp -= damage
 
-    def mobhunt_cli(self):
+    # changed this method name since it should probably be the same for both miniAdventures
+    def start_adventure(self):
         print("\n==============================")
         print("Mob Hunt Adventure")
         print("==============================")
@@ -112,7 +113,7 @@ class MobHunt(MiniAdventure):
         while True:
             if self.is_finished():
                 print(f"Adventure finished! Result: {self.get_result()}")
-                break
+                return
             if self.turn == 1:
                 self.player_turn_cli(self.player1)
                 self.turn = 2
