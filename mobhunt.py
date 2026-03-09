@@ -19,8 +19,7 @@ class MobHunt(MiniAdventure):
         self.player1 = player1
         self.player2 = player2
         self.monster = self.Monster("Goblin", 100, 20)
-        self.player_choice = {"1": 80, "2": 60, 20:2}
-        self.RandomScale = {80: 1, 60: 1.2, 20: 2}
+        
 
     def handle_input(self, player: PlayerProfile, choice:str):
         if choice == "1":
