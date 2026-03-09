@@ -31,7 +31,7 @@ class GMAEEngine():
             "3": self.login_Player2,
             #"4": self.menu.show_options,
             # "4": self.start_session
-            "4": self.show_realms
+            "4": self.start_session
         }
 
     def run(self):
@@ -106,9 +106,15 @@ class GMAEEngine():
     def show_realms(self): #default realms initialized in init RealmRegister
         print("\n==============================")
         print("Realms: \n")
+
+        realm_counter = 1
         for realm in self.realmReg.values():
-            print(f"Name: {realm.name} | Description: {realm.description} | Coord:{realm.x_coord},{realm.y_coord}")
+            print(f"{realm_counter}: {realm.name} | Description: {realm.description} | Coord:{realm.x_coord},{realm.y_coord}")
+            realm_counter+=1
+
+        print("\nEnter Realm Number: ")
         print("==============================\n")
+
 
     
     def game_loop():
