@@ -6,6 +6,8 @@ from gameSession import GameSession
 from playerProfile import PlayerProfile
 from user import User
 import time
+
+TEST_MODE = True
 class GMAEEngine():
     def __init__(self):
         self.UserManager = User()
@@ -32,7 +34,15 @@ class GMAEEngine():
         while cmd != "0":
             print("\n==============================")
             print("GuildQuest CLI")
+            print("TEST MODE SET UP")
             print("==============================")
+            
+            # TEST MODE REMOVE BEDORE SUBMITING
+            if TEST_MODE:
+                self.login_Player1()
+                self.login_Player2()
+                TEST_LOGIN = False
+
             print(f"Player 1: {self.player1.name if self.player1 else '(none)'}")
             print(f"Player 2: {self.player2.name if self.player2 else '(none)'}")
             for num, option in enumerate(self.printOptions):
@@ -56,12 +66,15 @@ class GMAEEngine():
     
     # this acts as an adapter and logs in player 1
     def login_Player1(self):
-        self.player1 = self.login_attempt()
+        self.player1 = self.UserManager.TEST_LOGIN()
+        #self.player1 = self.login_attempt()
 
 
     # this acts as an adapter and logs in player 2 
     def login_Player2(self):
-        self.player2 = self.login_attempt()
+        self.player2 = self.UserManager.TEST_LOGIN()
+
+        #self.player2 = self.login_attempt()
 
     def PrintOptions(self, list_obj):
         print(f"what would you like to do? (enter 0 to end) :") 

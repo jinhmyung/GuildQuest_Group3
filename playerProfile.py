@@ -22,7 +22,6 @@ class Adventurer(ABC):
     @staticmethod
     def from_dict(data):
         classes = {"Mage":Mage, "Warrior":Warrior, "Rogue":Rogue}
-        print(type(data))
         if isinstance(data, dict):
             ChildObj = classes[data["name"]]()
         else: 

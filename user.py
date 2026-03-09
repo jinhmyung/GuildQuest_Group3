@@ -3,11 +3,17 @@ import random
 import os #issues with finding the file on my side so had to os.getcwd()
 from profileManager import ProfileManager
 
+
+
 class User():
+
+
     def __init__(self, fileName = "user.json"):
         self.fileName = fileName
         self.profile_manager = ProfileManager()
         self.JsonFilePath = os.path.join(os.getcwd(), fileName)
+        self.TestBoolPlayer1 = True
+
 
     def create_user(self, username: str, password: str) -> None:
         try:
@@ -34,6 +40,7 @@ class User():
         return True
         
     def login(self, username: str, password: str) -> int:
+
         with open(self.JsonFilePath, "r") as f:
             data = json.load(f)
             if username in data and data[username]["password"] == password:
@@ -42,7 +49,18 @@ class User():
                 #print("Profile ID" + profile_id)
                 return self.profile_manager.load(profile_id)
         return False
-    
+
+    def TEST_LOGIN(self):
+        """remove this when we submit it is so we don't have to login every time"""
+        if self.TestBoolPlayer1:
+            self.TestBoolPlayer1 = False
+            return self.login("ydureix", "something123")
+        else:
+            return self.login("Criminal", "crimes123")
+
+
+        
+
     def login_cli(self):
         while True:
             print("\n==============================")
