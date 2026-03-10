@@ -5,7 +5,7 @@ from profileManager import ProfileManager
 from gameSession import GameSession
 from playerProfile import PlayerProfile
 from user import User
-from RealmRegister import RealmRegister
+from RealmRegister import RealmRegister, RealmCoord
 import time
 
 TEST_MODE = True
@@ -17,12 +17,16 @@ class GMAEEngine():
         self.menu = AdventureMenu()
         self.profile_manager = ProfileManager()
         self.session = Optional[GameSession]
+        
         self.realmReg = RealmRegister().realms
+        self.currentRealm = self.realmReg[RealmCoord(0,0)] #Realms created in RealmRegister
+        
+
 
 
         
         # these are the user option are they are printed in lines 36 and 37
-        self.printOptions = ["EXIT", "Create user", "Login user 1", "Login user 2", "Realms (list/create)" ]
+        self.printOptions = ["EXIT", "Create user", "Login user 1", "Login user 2", "MiniAdventure Menu", "Move Realm" ]
         
         # based on cmd input we index and call these methods in line 42
         self.CmdSelection = {
@@ -30,8 +34,9 @@ class GMAEEngine():
             "2": self.login_Player1,
             "3": self.login_Player2,
             #"4": self.menu.show_options,
-            # "4": self.start_session
-            "4": self.start_session
+            # "4": self.start_session5
+            "4": self.start_session,
+            "5": self.move_realms
         }
 
     def run(self):
@@ -47,9 +52,12 @@ class GMAEEngine():
                 self.login_Player1()
                 self.login_Player2()
                 TEST_LOGIN = False
+            
 
+            print(f"Current Realm: {self.currentRealm.name} (x: {self.currentRealm.Coord.x}, y: {self.currentRealm.Coord.x})")
             print(f"Player 1: {self.player1.name if self.player1 else '(none)'}")
             print(f"Player 2: {self.player2.name if self.player2 else '(none)'}")
+
             for num, option in enumerate(self.printOptions):
                 print(f"{num}) {option}")
             #add in a try catch here for later
@@ -81,7 +89,7 @@ class GMAEEngine():
 
         #self.player2 = self.login_attempt()
 
-    def PrintOptions(self, list_obj):
+    def PrintOptions(self, list_obj): #MARKED FOR JIN's REFERENCE
         print(f"what would you like to do? (enter 0 to end) :") 
         for num, obj in enumerate(list_obj):
             print(f"{num} : {obj}")
@@ -103,18 +111,25 @@ class GMAEEngine():
         
         return
     
+
+    
     def show_realms(self): #default realms initialized in init RealmRegister
         print("\n==============================")
         print("Realms: \n")
 
         realm_counter = 1
         for realm in self.realmReg.values():
-            print(f"{realm_counter}: {realm.name} | Description: {realm.description} | Coord:{realm.x_coord},{realm.y_coord}")
+            print(f"{realm_counter}: {realm.name} | Description: {realm.description} | Coord:{realm.Coord.x},{realm.Coord.y}")
             realm_counter+=1
 
-        print("\nEnter Realm Number: ")
+        # print("\nEnter Realm Number: ")
         print("==============================\n")
 
+    def move_realms(self): #
+        self.show_realms()
+        print("Move commands: \"left\", \"right\", \"up\", \"down\"")
+        #JIn will implement realm switching mechanics here. Reminder to me to change current_realm and miniAdventure_menu to corresponding Realm
+        return
 
     
     def game_loop():
