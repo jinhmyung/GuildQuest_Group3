@@ -58,6 +58,14 @@ class User():
         else:
             return self.login("Criminal", "crimes123")
 
+    def TEST_LOGIN_P1(self):
+        """Always log in as player 1 test account (ydureix/John)."""
+        return self.login("ydureix", "something123")
+
+    def TEST_LOGIN_P2(self):
+        """Always log in as player 2 test account (Criminal/Crime)."""
+        return self.login("Criminal", "crimes123")
+
 
         
 

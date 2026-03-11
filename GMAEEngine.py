@@ -60,10 +60,15 @@ class GMAEEngine():
 
             for num, option in enumerate(self.printOptions):
                 print(f"{num}) {option}")
-            #add in a try catch here for later
             cmd = input("Choose: ").strip()
-            if cmd in self.CmdSelection.keys():
+            if cmd == "6":
+                self.view_p1_inventory()
+            elif cmd == "7":
+                self.view_p2_inventory()
+            elif cmd in self.CmdSelection.keys():
                 self.CmdSelection[cmd]()
+            elif cmd != "0":
+                print("Invalid option. Please enter 0, 1, 2, 3, 4, 5, 6, or 7.")
             
         print("Bye!")
     
@@ -79,15 +84,21 @@ class GMAEEngine():
     
     # this acts as an adapter and logs in player 1
     def login_Player1(self):
-        self.player1 = self.UserManager.TEST_LOGIN()
-        #self.player1 = self.login_attempt()
+        if TEST_MODE:
+            self.player1 = self.UserManager.TEST_LOGIN_P1()
+        else:
+            self.player1 = self.login_attempt()
+        if self.player1:
+            print("Player 1 logged in.")
 
-
-    # this acts as an adapter and logs in player 2 
+    # this acts as an adapter and logs in player 2
     def login_Player2(self):
-        self.player2 = self.UserManager.TEST_LOGIN()
-
-        #self.player2 = self.login_attempt()
+        if TEST_MODE:
+            self.player2 = self.UserManager.TEST_LOGIN_P2()
+        else:
+            self.player2 = self.login_attempt()
+        if self.player2:
+            print("Player 2 logged in.")
 
     def PrintOptions(self, list_obj): #MARKED FOR JIN's REFERENCE
         print(f"what would you like to do? (enter 0 to end) :") 
@@ -132,10 +143,12 @@ class GMAEEngine():
         return
 
     def _show_inventory(self, profile, label: str) -> None:
+        print(f"\n----- {label} Inventory -----")
         if profile is None:
             print(f"{label} is not logged in.")
+            input("Press Enter to continue...")
             return
-        print(f"\n===== {label} Inventory ({profile.name}) =====")
+        print(f"Player: {profile.name}")
         inv = getattr(profile, "inventory", [])
         if not inv:
             print("  (empty)")
@@ -145,7 +158,8 @@ class GMAEEngine():
                 rarity = it.get("rarity", "") if isinstance(it, dict) else getattr(it, "rarity", "")
                 item_type = it.get("item_type", "") if isinstance(it, dict) else getattr(it, "item_type", "")
                 print(f"  {i}. {name}  [{item_type}]  ({rarity})")
-        print("==============================\n")
+        print("==============================")
+        input("Press Enter to continue...")
 
     def view_p1_inventory(self) -> None:
         self._show_inventory(self.player1, "P1")
