@@ -26,17 +26,17 @@ class GMAEEngine():
 
         
         # these are the user option are they are printed in lines 36 and 37
-        self.printOptions = ["EXIT", "Create user", "Login user 1", "Login user 2", "MiniAdventure Menu", "Move Realm" ]
+        self.printOptions = ["EXIT", "Create user", "Login user 1", "Login user 2", "MiniAdventure Menu", "Move Realm", "View P1 inventory", "View P2 inventory"]
         
         # based on cmd input we index and call these methods in line 42
         self.CmdSelection = {
             "1": self.UserManager.create_cli, 
             "2": self.login_Player1,
             "3": self.login_Player2,
-            #"4": self.menu.show_options,
-            # "4": self.start_session5
             "4": self.start_session,
-            "5": self.move_realms
+            "5": self.move_realms,
+            "6": self.view_p1_inventory,
+            "7": self.view_p2_inventory,
         }
 
     def run(self):
@@ -130,6 +130,28 @@ class GMAEEngine():
         print("Move commands: \"left\", \"right\", \"up\", \"down\"")
         #JIn will implement realm switching mechanics here. Reminder to me to change current_realm and miniAdventure_menu to corresponding Realm
         return
+
+    def _show_inventory(self, profile, label: str) -> None:
+        if profile is None:
+            print(f"{label} is not logged in.")
+            return
+        print(f"\n===== {label} Inventory ({profile.name}) =====")
+        inv = getattr(profile, "inventory", [])
+        if not inv:
+            print("  (empty)")
+        else:
+            for i, it in enumerate(inv, 1):
+                name = it.get("name", "?") if isinstance(it, dict) else getattr(it, "name", "?")
+                rarity = it.get("rarity", "") if isinstance(it, dict) else getattr(it, "rarity", "")
+                item_type = it.get("item_type", "") if isinstance(it, dict) else getattr(it, "item_type", "")
+                print(f"  {i}. {name}  [{item_type}]  ({rarity})")
+        print("==============================\n")
+
+    def view_p1_inventory(self) -> None:
+        self._show_inventory(self.player1, "P1")
+
+    def view_p2_inventory(self) -> None:
+        self._show_inventory(self.player2, "P2")
 
     
     def game_loop():
