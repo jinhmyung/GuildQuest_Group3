@@ -22,6 +22,7 @@ class ProfileManager():
                 data = json.load(f)
         except (FileNotFoundError, json.JSONDecodeError):
             data = {}
+        
         data[profile_id] = profile.to_dict()
         with open(self.filename, "w") as f:
             json.dump(data, f)

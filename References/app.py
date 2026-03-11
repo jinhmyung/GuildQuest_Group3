@@ -31,20 +31,20 @@ class Entities(ABC):
     
     def getName(self):
         return self.name
-    
+
     def rename(self, name):
         self.name = name
-    
+
     def removeEntity(self, index):
         if index < len(self.List):
             del self.List[index]
-    
+
     def addEntity(self, NewObject):
         self.List.append(NewObject)
-    
+
     def getEntity(self):
         return self.List
-    
+
     def updateEntity(self, index):
         if index < len(self.List):
             return self.List[index]
@@ -227,7 +227,7 @@ class BothTime(TimeStrategy):
         self.offset = offset
 
 class WorldClock:
-    instance = None
+   instance  = None
     
     def __new__(cls):
         if cls.instance is None:
