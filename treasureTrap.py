@@ -150,6 +150,7 @@ class TreasureTrapAdventure(MiniAdventure):
         self.grid.get_cell(4, 4).occupant = self.player2
         self.player2.move_to(4, 4)
         self.grid.place_treasures_randomly(5)
+        self.turn = 1
 
     def apply_cell_effect(self, player):
         cell = self.grid.get_cell(player.row, player.col)
@@ -167,7 +168,8 @@ class TreasureTrapAdventure(MiniAdventure):
             self.outcome = "P2 wins"
 
     def player_turn_cli(self, player):
-        print(f"\n{player.name}'s turn")
+        label = "P1" if player is self.player1 else "P2"
+        print(f"\n{label} ({player.name})'s turn")
         choice = input("1.Move 2.Trap 3.Skip: ").strip()
         if choice == "1":
             direction = input("up/down/left/right? ").strip().lower()
@@ -239,8 +241,14 @@ class TreasureTrapAdventure(MiniAdventure):
         print("\n==============================")
         print("Treasure & Trap")
         print("==============================")
-        print("1, 2 = players  T = treasure  X = trap  . = empty")
+        print("Two players take turns on a 5x5 grid. Each turn you can:")
+        print("  1) Move one step (up/down/left/right)")
+        print("  2) Place a trap on an empty cell")
+        print("  3) Skip your turn")
+        print("Collect treasures (T). If you step on a trap (X), you skip your next turn!")
         print("First to 3 treasures wins!")
+        print("==============================")
+        print("Map: 1, 2 = players  T = treasure  X = trap  . = empty")
         print("==============================")
 
         while not self.is_finished():
