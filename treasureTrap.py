@@ -61,7 +61,10 @@ class GridMap:
             self.cells[row][col].has_treasure = True
 
     def place_treasures_randomly(self, count: int) -> None:
-        pass
+        empty = [(r, c) for r in range(self.height) for c in range(self.width)
+                 if self.get_cell(r, c).is_empty()]
+        for (r, c) in random.sample(empty, min(count, len(empty))):
+            self.place_treasure(r, c)
 
 
 class GridMapAdapter:
@@ -72,7 +75,10 @@ class GridMapAdapter:
         return self.adaptee.is_inside(row, col)
 
     def is_empty_for_trap(self, row: int, col: int) -> bool:
-        pass
+        if not self.is_valid(row, col):
+            return False
+        cell = self.adaptee.get_cell(row, col)
+        return cell.occupant is None and not cell.has_treasure and cell.trap is None
 
     def move_player(self, player: Player, new_row: int, new_col: int) -> None:
         if not self.is_valid(new_row, new_col):
@@ -85,13 +91,22 @@ class GridMapAdapter:
         player.move_to(new_row, new_col)
 
     def place_trap(self, row: int, col: int) -> bool:
-        pass
+        if not self.is_empty_for_trap(row, col):
+            return False
+        self.adaptee.get_cell(row, col).trap = Trap()
+        return True
 
     def remove_trap(self, row: int, col: int) -> None:
-        pass
+        if not self.is_valid(row, col):
+            return
+        cell = self.adaptee.get_cell(row, col)
+        cell.trap = None
 
     def remove_treasure(self, row: int, col: int) -> None:
-        pass
+        if not self.is_valid(row, col):
+            return
+        cell = self.adaptee.get_cell(row, col)
+        cell.has_treasure = False
 
     def render(self, player1: Player, player2: Player) -> str:
         lines = []
@@ -134,12 +149,22 @@ class TreasureTrapAdventure(MiniAdventure):
         self.player1.move_to(0, 0)
         self.grid.get_cell(4, 4).occupant = self.player2
         self.player2.move_to(4, 4)
+        self.grid.place_treasures_randomly(5)
 
     def apply_cell_effect(self, player):
-        pass  # TODO
+        cell = self.grid.get_cell(player.row, player.col)
+        if cell.has_treasure:
+            player.add_treasure()
+            self.adapter.remove_treasure(player.row, player.col)
+        if cell.trap is not None:
+            cell.trap.activate(player)
+            self.adapter.remove_trap(player.row, player.col)
 
     def check_win(self):
-        pass  # TODO
+        if self.player1.treasure_count >= 3:
+            self.outcome = "P1 wins"
+        elif self.player2.treasure_count >= 3:
+            self.outcome = "P2 wins"
 
     def player_turn_cli(self, player):
         print(f"\n{player.name}'s turn")
@@ -161,13 +186,31 @@ class TreasureTrapAdventure(MiniAdventure):
                 self.adapter.move_player(player, new_row, new_col)
                 self.apply_cell_effect(player)
         elif choice == "2":
-            pass  # TODO
+            try:
+                row = int(input("Row (0-4): ").strip())
+                col = int(input("Col (0-4): ").strip())
+                if self.adapter.place_trap(row, col):
+                    print("Trap placed!")
+                else:
+                    print("Cannot place trap there (occupied or has treasure/trap).")
+            except ValueError:
+                print("Invalid number.")
+        elif choice == "3":
+            print("You skip this turn.")
 
     def handle_input(self, player_input: str):
-        pass
+        if player_input == "1":
+            self.player_turn_cli(self.player1)
+        elif player_input == "2":
+            self.player_turn_cli(self.player2)
 
     def update(self):
-        pass
+        if self.turn == 1:
+            self.player_turn_cli(self.player1)
+            self.turn = 2
+        else:
+            self.player_turn_cli(self.player2)
+            self.turn = 1
 
     def get_state(self):
         return self.outcome
@@ -179,8 +222,17 @@ class TreasureTrapAdventure(MiniAdventure):
         return self.outcome
 
     def reset(self):
-        # TODO
+        self.grid = GridMap(5, 5)
+        self.adapter = GridMapAdapter(self.grid)
+        self.player1 = Player(getattr(self.profile1, "name", "P1"))
+        self.player2 = Player(getattr(self.profile2, "name", "P2"))
+        self.grid.get_cell(0, 0).occupant = self.player1
+        self.player1.move_to(0, 0)
+        self.grid.get_cell(4, 4).occupant = self.player2
+        self.player2.move_to(4, 4)
+        self.grid.place_treasures_randomly(5)
         self.outcome = "IN_PROGRESS"
+        self.turn = 1
 
     def start_adventure(self):
         self.initialize()
@@ -192,16 +244,25 @@ class TreasureTrapAdventure(MiniAdventure):
         print("==============================")
 
         while not self.is_finished():
-            # show map and scores
             print(self.adapter.render(self.player1, self.player2))
             print(f"P1: {self.player1.treasure_count}  P2: {self.player2.treasure_count}")
 
             if self.turn == 1:
-                self.player_turn_cli(self.player1)
-                self.turn = 2
+                if self.player1.skip_next_turn:
+                    print(f"\n{self.player1.name} skips this turn (trap!).")
+                    self.player1.clear_skip()
+                    self.turn = 2
+                else:
+                    self.player_turn_cli(self.player1)
+                    self.turn = 2
             else:
-                self.player_turn_cli(self.player2)
-                self.turn = 1
+                if self.player2.skip_next_turn:
+                    print(f"\n{self.player2.name} skips this turn (trap!).")
+                    self.player2.clear_skip()
+                    self.turn = 1
+                else:
+                    self.player_turn_cli(self.player2)
+                    self.turn = 1
 
             self.check_win()
 
