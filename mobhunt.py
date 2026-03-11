@@ -1,7 +1,7 @@
 from miniAdventure import MiniAdventure
 from playerProfile import PlayerProfile
 import random
-
+import uuid
 
 #CREATE SOME RANDOM MONSTER BASED ON REALM DIFFICULTY
 class MonsterFactory:
@@ -71,6 +71,7 @@ class MobHunt(MiniAdventure):
         self.player1 = player1
         self.player2 = player2
         self.monster = MonsterFactory.create_monster("extreme")
+        self.id = id
     
     #CAN USE TO SET REALM SHOULD REPLACE INIT WITH THIS MAYBE??? BUT INIT DOES THE SAME THING
     def initialize(self, player1: PlayerProfile, player2: PlayerProfile):
