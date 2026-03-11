@@ -9,3 +9,4 @@ class Player():
     def apply_result(self, result:str):
         return
     
+    
