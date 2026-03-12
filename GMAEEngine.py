@@ -54,7 +54,7 @@ class GMAEEngine():
                 TEST_LOGIN = False
             
 
-            print(f"Current Realm: {self.currentRealm.name} (x: {self.currentRealm.Coord.x}, y: {self.currentRealm.Coord.x})")
+            print(f"Current Realm: {self.currentRealm.name} (x: {self.currentRealm.Coord.x}, y: {self.currentRealm.Coord.y})")
             print(f"Player 1: {self.player1.name if self.player1 else '(none)'}")
             print(f"Player 2: {self.player2.name if self.player2 else '(none)'}")
 
@@ -138,7 +138,19 @@ class GMAEEngine():
 
     def move_realms(self): #
         self.show_realms()
-        print("Move commands: \"left\", \"right\", \"up\", \"down\"")
+        cmd = input("Enter Realm Coordinates: \"x y\"\n").strip()
+        try:
+            coord = cmd.split()
+            x = int(coord[0])
+            y = int(coord[1])
+        except ValueError:
+            print("Coordinates must be numbers.")
+        try:
+            self.currentRealm = self.realmReg[RealmCoord(x,y)]
+            print("Entered Realm Successfully")
+        except Exception as E:
+            print("Realm doesn't exist")
+
         #JIn will implement realm switching mechanics here. Reminder to me to change current_realm and miniAdventure_menu to corresponding Realm
         return
 
