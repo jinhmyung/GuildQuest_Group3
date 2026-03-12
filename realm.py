@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import uuid
 
 
@@ -14,24 +14,11 @@ class RealmCoord:
 
 
 
-@dataclass
+@dataclass(frozen=True)
 class Realm:
-    realm_id: str
-    name: str
-    Coord: RealmCoord 
+    realm_id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    name: str = ""
+    Coord: "RealmCoord" = None
     description: str = ""
-    miniAdventure_menuID: str = ""#miniAdventure Menu should have an ID.
-    
-
-    # map_id: int = 0
-    # x_coord: int = 0 #not sure if these coordinates are required or needed. might need?
-    # y_coord: int = 0 #not sure if these coordinates are required or needed. might need?
-    
-    def __init__(self, name, description, RealmCoord, miniAdventure_menuID):
-        self.realm_id = uuid.uuid4() #generates a unique ID
-        self.name = name
-        self.description = description
-        self.miniAdventure_menuID = miniAdventure_menuID
-        self.Coord= RealmCoord
-    
+    miniAdventure_menuID: str = ""
 

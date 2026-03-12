@@ -1,6 +1,6 @@
 from typing import Optional
 
-from adventure import AdventureMenu
+from adventure import AdventureMenu, DictOfAdventureMenu
 from profileManager import ProfileManager
 from gameSession import GameSession
 from playerProfile import PlayerProfile
@@ -14,12 +14,14 @@ class GMAEEngine():
         self.UserManager = User()
         self.player1 = None
         self.player2 = None
-        self.menu = AdventureMenu()
+        self.DictOfAdventureMenu = DictOfAdventureMenu().AM_dictionary #key: Realm, value: AdventureMenu
+        self.currentMenu = AdventureMenu()
         self.profile_manager = ProfileManager()
         self.session = Optional[GameSession]
         
         self.realmReg = RealmRegister().realms
         self.currentRealm = self.realmReg[RealmCoord(0,0)] #Realms created in RealmRegister
+        self.DictOfAdventureMenu[self.currentRealm] = self.currentMenu
         
 
 
@@ -113,12 +115,12 @@ class GMAEEngine():
     def start_session(self):
         if self.player1 and self.player2:
             # get the mini game option's ex Mobhunt/treasureTrap
-            miniGames = self.menu.show_options()
+            miniGames = self.currentMenu.show_options()
             # call the method in line 79 and pass in the mini game options to be printed also get user input and it's result
             result = self.PrintOptions(miniGames)
 
             # create an instance of the chosen game pass in game name, player1, player2, some stringID this case doesn't matter. 
-            self.menu.get_selections(miniGames[result], self.player1, self.player2, miniGames[result])
+            self.currentMenu.get_selections(miniGames[result], self.player1, self.player2, miniGames[result])
         
         return
     

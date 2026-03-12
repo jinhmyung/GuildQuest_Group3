@@ -4,6 +4,8 @@ from typing import Optional
 from miniAdventure import MiniAdventure
 from mobhunt import MobHunt
 from treasureTrap import TreasureTrapAdventure
+from dataclasses import dataclass, field
+from realm import Realm
 
 class AdventureFactory():
     def __init__(self):
@@ -14,7 +16,7 @@ class AdventureFactory():
     def getName(self):
         return self.adventureName
 
-    def register(self, name: str, cls: Type[MiniAdventure]): #we are registering an adventure in a registry?
+    def register(self, name: str, cls: Type[MiniAdventure]):
         self.registry[name] = cls
 
     def create(self, name: str, *args) -> Optional[MiniAdventure]:
@@ -26,6 +28,7 @@ class AdventureFactory():
         return list(self.registry.keys())
 
 class AdventureMenu():
+
     instance  = None            #re-used code from Nicol app.py singlton
     
     def __new__(cls):                   
@@ -46,3 +49,10 @@ class AdventureMenu():
     def get_selections(self, choice, *args):
     # the args are player1 player2 and gameID not sure what that does. 
         self.factory.create(choice, *args).start_adventure()
+
+@dataclass
+class DictOfAdventureMenu:
+    AM_dictionary: dict[Realm, "AdventureMenu"] = field(default_factory=dict)
+
+    def add_menu(self, realm: Realm, menu: "AdventureMenu"):
+        self.AM_dictionary[realm] = menu
