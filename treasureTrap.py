@@ -1,7 +1,7 @@
 # Treasure & Trap mini adventure2
 
 from miniAdventure import MiniAdventure
-#from realm import Realm
+from realm import Realm
 import random
 
 # Item types and rarities (stored in PlayerProfile.inventory as dicts)
@@ -169,7 +169,7 @@ class GridMapAdapter:
 
 
 class TreasureTrapAdventure(MiniAdventure):
-    def __init__(self, player1, player2, id: str):
+    def __init__(self, player1, player2, id: str, realm: Realm):
         super().__init__(id)
         self.profile1 = player1  # from GuildQuest (name, level, etc)
         self.profile2 = player2
@@ -179,6 +179,7 @@ class TreasureTrapAdventure(MiniAdventure):
         self.adapter = None
         self.outcome = "IN_PROGRESS"
         self.turn = 1
+        self.realm = realm
 
     def initialize(self):
         self.grid = GridMap(5, 5)
