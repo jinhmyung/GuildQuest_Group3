@@ -9,7 +9,7 @@ from realm import Realm
 
 class AdventureFactory():
     def __init__(self):
-        self.registry = {"Mob Hunt": MobHunt, "Treasure Trap": TreasureTrapAdventure} #why does a factory class have a registry for adding multiple adventures but the factory has a single adventureName and ID for a single adventure?
+        self.registry = {"Mob Hunt": MobHunt, "Treasure Trap": TreasureTrapAdventure} 
         self.adventureName = ""
         self.adventureID = 0
     

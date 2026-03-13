@@ -21,6 +21,5 @@ class Realm:
     name: str = ""
     Coord: "RealmCoord" = None
     description: str = ""
-    miniAdventure_menuID: str = ""
     difficulty = random.choice(["easy", "medium", "hard", "extreme"])
 

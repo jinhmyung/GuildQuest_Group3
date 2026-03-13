@@ -14,14 +14,25 @@ class GMAEEngine():
         self.UserManager = User()
         self.player1 = None
         self.player2 = None
+
+        self.AdventureMenu1=AdventureMenu()
+        self.AdventureMenu2=AdventureMenu()
+        self.AdventureMenu3=AdventureMenu()
+        self.AdventureMenu4=AdventureMenu()
+
         self.DictOfAdventureMenu = DictOfAdventureMenu().AM_dictionary #key: Realm, value: AdventureMenu
-        self.currentMenu = AdventureMenu()
+        self.currentMenu = self.AdventureMenu1
         self.profile_manager = ProfileManager()
         self.session = Optional[GameSession]
         
         self.realmReg = RealmRegister().realms
         self.currentRealm = self.realmReg[RealmCoord(0,0)] #Realms created in RealmRegister
         self.DictOfAdventureMenu[self.currentRealm] = self.currentMenu
+
+        for realm in self.realmReg.values():
+            self.DictOfAdventureMenu[realm] = AdventureMenu() 
+        
+
         
 
 
@@ -149,11 +160,13 @@ class GMAEEngine():
             print("Coordinates must be numbers.")
         try:
             self.currentRealm = self.realmReg[RealmCoord(x,y)]
+            self.currentMenu = self.DictOfAdventureMenu[self.currentRealm]
             print("Entered Realm Successfully")
         except Exception as E:
             print("Realm doesn't exist")
 
         #JIn will implement realm switching mechanics here. Reminder to me to change current_realm and miniAdventure_menu to corresponding Realm
+
         return
 
     def _show_inventory(self, profile, label: str) -> None:
