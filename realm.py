@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+import random
 import uuid
 
 
@@ -21,4 +22,5 @@ class Realm:
     Coord: "RealmCoord" = None
     description: str = ""
     miniAdventure_menuID: str = ""
+    difficulty = random.choice(["easy", "medium", "hard", "extreme"])
 

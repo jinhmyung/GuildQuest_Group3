@@ -32,7 +32,7 @@ class Entities(ABC):
         pass
 
 class Inventory:
-    def __init__(self, tms:list):
+    def __init__(self, tms:list = []):
         self.itemsList = tms   
     
     def AddItem(self, item_obj):
@@ -44,7 +44,7 @@ class Inventory:
     def getItem(self, index):
         return self.itemsList[index]
 
-    def getSize():
+    def getSize(self):
         return len(self.itemsList)
     
     def getAllItems(self):

@@ -56,9 +56,9 @@ class GMAEEngine():
                 TEST_LOGIN = False
             
 
-            print(f"Current Realm: {self.currentRealm.name} (x: {self.currentRealm.Coord.x}, y: {self.currentRealm.Coord.y})")
-            print(f"Player 1: {self.player1.name if self.player1 else '(none)'}")
-            print(f"Player 2: {self.player2.name if self.player2 else '(none)'}")
+            # print(f"Current Realm: {self.currentRealm.name} (x: {self.currentRealm.Coord.x}, y: {self.currentRealm.Coord.y})")
+            # print(f"Player 1: {self.player1.name if self.player1 else '(none)'}")
+            # print(f"Player 2: {self.player2.name if self.player2 else '(none)'}")
 
             for num, option in enumerate(self.printOptions):
                 print(f"{num}) {option}")

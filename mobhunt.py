@@ -1,5 +1,6 @@
 from miniAdventure import MiniAdventure
 from playerProfile import PlayerProfile
+from ItemInventory import Item
 import random
 import uuid
 
@@ -7,10 +8,11 @@ import uuid
 class MonsterFactory:
 
     class Monster:
-        def __init__(self, name: str, hp: int, attack: int):
+        def __init__(self, name: str, hp: int, attack: int, drop: Item):
             self.name = name
             self.hp = hp
             self.attack = attack
+            self.drop = drop
 
 
 
@@ -34,31 +36,31 @@ class MonsterFactory:
     @staticmethod
     def _random_easy_monster():
         return random.choice([
-            MonsterFactory.Monster("Goblin", 100, 4),
-            MonsterFactory.Monster("Orc", 150, 6)
+            MonsterFactory.Monster("Goblin", 100, 4, Item("Green", "uncommon", "Tools", "IDK")),
+            MonsterFactory.Monster("Orc", 150, 6, Item("Teeth", "uncommon", "Tools", "Sharp teeth"))
         ])
 
 
     @staticmethod
     def _random_medium_monster():
         return random.choice([
-            MonsterFactory.Monster("Debt Collector", 100, 20),
-            MonsterFactory.Monster("Troll", 200, 8)
+            MonsterFactory.Monster("Debt Collector", 100, 20, Item("Checkbook", "common", "Tools", "Money")),
+            MonsterFactory.Monster("Troll", 200, 8, Item("Club", "common", "Tools", "Big club"))
         ])
 
 
     @staticmethod
     def _random_hard_monster():
         return random.choice([
-            MonsterFactory.Monster("Dragon", 300, 15),
-            MonsterFactory.Monster("Demon Lord", 500, 10)
+            MonsterFactory.Monster("Dragon", 300, 15, Item("Head", "rare", "Tools", "Dragon head")),
+            MonsterFactory.Monster("Demon Lord", 500, 10, Item("Cool Sword", "rare", "Tools", "Cool looking sword"))
         ])
     
     @staticmethod
     def _random_extreme_monster():
         return random.choice([
-            MonsterFactory.Monster("Gojo Satoru", 1000, 200),
-            MonsterFactory.Monster("Trash can", 10000000000000000000, 1)
+            MonsterFactory.Monster("Gojo Satoru", 1000, 200, Item("Eyes", "epic", "Tools", "Eyes")),
+            MonsterFactory.Monster("Trash can", 10000000000000000000, 1, Item("Trash Can", "epic", "Tools", "Trashhh"))
         ])
 
 class MobHunt(MiniAdventure):
@@ -78,39 +80,6 @@ class MobHunt(MiniAdventure):
         self.player1 = player1
         self.player2 = player2
 
-    
-    #HANDLES THE PLAYER INPUT
-    def handle_input(self, player: PlayerProfile, choice:str):
-        if choice == "1":
-            random_number = random.randint(1, 100)
-            if random_number <= 90:
-                damage = player.char_class.attack
-                self.monster.hp -= damage
-
-                print(f"{player.name} attacks for {damage} damage!")
-            else:
-                print(f"{player.name} missed the attack!")
-        elif choice == "2":
-            random_number = random.randint(1, 100)
-            if random_number <= 50:
-                damage = player.char_class.attack * 1.2
-                self.monster.hp -= damage
-
-                print(f"{player.name} uses a heavy attack for {damage} damage!")
-            else:
-                print(f"{player.name} missed the heavy attack!")
-        elif choice == "3":
-            random_number = random.randint(1, 100)
-            if random_number <= 10:
-                damage = player.char_class.attack * 2
-                self.monster.hp -= damage
-
-                print(f"{player.name} uses a special attack for {damage} damage!")
-            else:
-                print(f"{player.name} missed the special attack!")
-        else:
-           return False
-        return True
 
     #NEVER USED
     def update(self):
@@ -141,22 +110,6 @@ class MobHunt(MiniAdventure):
     def reset(self):
         self.state = "not started"
         self.result = None
-
-    #
-    def player_turn_cli(self, player: PlayerProfile):
-        if player.char_class.hp <= 0:
-            print(f"{player.name} is defeated and cannot take a turn.")
-            return
-        print(f"\n{player.name}'s turn")
-        print("1. Attack")
-        print("2. Heavy Attack")
-        print("3. Special Attack")
-        while True:
-            choice = input("Enter your choice (1-3): ").strip()
-            if self.handle_input(player, choice):
-                break       
-            else:
-                print("Invalid choice. Please enter 1, 2, or 3.")
 
     #RANDOMLY SELECT AN ATTACK -- SAME AS PLAYER INPUT
     def monsterRNG(self, player: PlayerProfile):
@@ -196,15 +149,6 @@ class MobHunt(MiniAdventure):
             target = random.choice([self.player1, self.player2])
         self.monsterRNG(target)
 
-    #ONLY USED FOR PRINTING CLI
-    def status_bar_cli(self):
-        print("\n==============================")
-        print("Mob Hunt Adventure")
-        print("==============================")
-        print(f"Player 1: ({self.player1.name} {self.player1.char_class.name}) HP: {max(0, self.player1.char_class.hp)}")
-        print(f"Player 2: ({self.player2.name} {self.player2.char_class.name}) HP: {max(0, self.player2.char_class.hp)}")
-        print(f"Monster : ({self.monster.name}) HP: {max(0, self.monster.hp)}")
-        print("\n==============================")
 
     # changed this method name since it should probably be the same for both miniAdventures
     def start_adventure(self):
@@ -222,3 +166,71 @@ class MobHunt(MiniAdventure):
             elif self.turn == 3:
                 self.monster_turn_cli()
                 self.turn = 1
+    #HANDLES
+    #PLAYER INPUT
+    def handle_input(self, player: PlayerProfile, choice:str):
+        if choice == "1":
+            random_number = random.randint(1, 100)
+            if random_number <= 90:
+                damage = player.char_class.attack
+                self.monster.hp -= damage
+
+                print(f"{player.name} attacks for {damage} damage!")
+            else:
+                print(f"{player.name} missed the attack!")
+        elif choice == "2":
+            random_number = random.randint(1, 100)
+            if random_number <= 50:
+                damage = player.char_class.attack * 1.2
+                self.monster.hp -= damage
+
+                print(f"{player.name} uses a heavy attack for {damage} damage!")
+            else:
+                print(f"{player.name} missed the heavy attack!")
+        elif choice == "3":
+            random_number = random.randint(1, 100)
+            if random_number <= 10:
+                damage = player.char_class.attack * 2
+                self.monster.hp -= damage
+
+                print(f"{player.name} uses a special attack for {damage} damage!")
+            else:
+                print(f"{player.name} missed the special attack!")
+        elif choice == "4":
+            random_number = random.randint(1, 100)
+            if random_number <= 10:
+                damage = player.char_class.attack * 2
+                self.monster.hp -= damage
+
+                print(f"{player.name} uses a special attack for {damage} damage!")
+            else:
+                print(f"{player.name} missed the special attack!")
+        else:
+           return False
+        return True
+    #CLIs
+    #ONLY USED FOR PRINTING CLI
+    def status_bar_cli(self):
+        print("\n==============================")
+        print("Mob Hunt Adventure")
+        print("==============================")
+        print(f"Player 1: ({self.player1.name} {self.player1.char_class.name}) HP: {max(0, self.player1.char_class.hp)}")
+        print(f"Player 2: ({self.player2.name} {self.player2.char_class.name}) HP: {max(0, self.player2.char_class.hp)}")
+        print(f"Monster : ({self.monster.name}) HP: {max(0, self.monster.hp)}")
+        print("\n==============================")
+
+    def player_turn_cli(self, player: PlayerProfile):
+        if player.char_class.hp <= 0:
+            print(f"{player.name} is defeated and cannot take a turn.")
+            return
+        print(f"\n{player.name}'s turn")
+        print("1. Attack")
+        print("2. Heavy Attack")
+        print("3. Special Attack")
+        print("4. Use Item")
+        while True:
+            choice = input("Enter your choice (1-4): ").strip()
+            if self.handle_input(player, choice):
+                break       
+            else:
+                print("Invalid choice. Please enter 1, 2, 3, 4.")

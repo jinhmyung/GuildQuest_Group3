@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-
+from ItemInventory import Inventory
 class Adventurer(ABC):
     def __init__(self, name:str, hp:int, attack:int):
         self.name = name
@@ -11,7 +11,7 @@ class Adventurer(ABC):
         pass
 
     def to_dict(self):
-        # this might matter if we need to save the users attakc power or hp if it goes up
+        # this might matter if we need to save the users attack power or hp if it goes up
         return {"name": self.name}
         """return {
             "name": self.name,
@@ -71,7 +71,7 @@ class PlayerProfile():
         self.char_class = None
         self.achievements = []
         self.quest_history = []
-        self.inventory = []
+        self.inventory = Inventory()
 
     def to_dict(self):
         return {
@@ -81,7 +81,7 @@ class PlayerProfile():
             "char_class": self.char_class.to_dict(),
             "achievements": self.achievements,
             "quest_history": self.quest_history,
-            "inventory": self.inventory
+            "inventory": self.inventory.getAllItems() #MAYBE CHANGE USING TO_DICT
         }
 
     def from_dict(self, data: dict):
@@ -90,7 +90,7 @@ class PlayerProfile():
         self.level = data.get("level", self.level)
         self.achievements = data.get("achievements", self.achievements)
         self.quest_history = data.get("quest_history", self.quest_history)
-        self.inventory = data.get("inventory", self.inventory)
+        self.inventory = Inventory(data.get("inventory", self.inventory))
 
         self.char_class = Adventurer.from_dict(data.get("char_class", self.char_class))
         print(self.char_class.attackMonster())
