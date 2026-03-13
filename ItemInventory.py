@@ -150,10 +150,3 @@ class InventoryMenu:
             print("invalid selection default realm has been selected`")
             return 0
         return index
-    
-
-    
-
-Inventory1 = Inventory([])
-menu = InventoryMenu(Inventory1)
-menu.MainMenu()

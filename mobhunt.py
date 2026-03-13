@@ -66,7 +66,6 @@ class MobHunt(MiniAdventure):
 
     def __init__(self, player1: PlayerProfile, player2: PlayerProfile, id: str, realm: Realm):
         super().__init__(id)
-        print(realm)
         self.state = "ongoing"
         self.turn = 1
         self.result = None
