@@ -107,12 +107,17 @@ class GMAEEngine():
     def PrintOptions(self, list_obj): #MARKED FOR JIN's REFERENCE
         print(f"what would you like to do? (enter 0 to end) :") 
         for num, obj in enumerate(list_obj):
-            print(f"{num} : {obj}")
+            print(f"{num + 1} : {obj}")
         
         result = input().strip()
-        if result.isdigit() and int(result) < len(list_obj):
-            print(f"selected result {list_obj[int(result)]}")
-            return int(result)
+        while result != "0":
+            if result.isdigit() and int(result) <= len(list_obj):
+                print(f"selected result {list_obj[int(result) - 1]}")
+                return int(result) - 1
+            else:
+                print("THAT GAME DOES NOT EXIST! (TRY AGAIN)")
+            result = input().strip()
+        
 
     def start_session(self):
         if self.player1 and self.player2:
@@ -122,7 +127,7 @@ class GMAEEngine():
             result = self.PrintOptions(miniGames)
 
             # create an instance of the chosen game pass in game name, player1, player2, some stringID this case doesn't matter. 
-            self.currentMenu.get_selections(miniGames[result], self.player1, self.player2, miniGames[result])
+            self.currentMenu.get_selections(miniGames[result], self.player1, self.player2, miniGames[result], self.currentRealm)
         
         return
     
@@ -142,6 +147,7 @@ class GMAEEngine():
 
     def move_realms(self): #
         self.show_realms()
+<<<<<<< HEAD
         cmd = input("Enter Realm Coordinates: \"x y\"\n").strip()
         try:
             coord = cmd.split()
@@ -154,6 +160,26 @@ class GMAEEngine():
             print("Entered Realm Successfully")
         except Exception as E:
             print("Realm doesn't exist")
+=======
+        cmd = input("Enter Realm Coordinates: \"x y\" (0 to go back)\n").strip()
+        while cmd != "0":
+            try:
+                coord = cmd.split()
+                x = int(coord[0])
+                y = int(coord[1])
+                try:
+                    self.currentRealm = self.realmReg[RealmCoord(x,y)]
+                    self.currentMenu = self.DictOfAdventureMenu[self.currentRealm]
+                    print("Entered Realm Successfully")
+                    break
+                except Exception as E:
+                    print("Realm doesn't exist")
+            except ValueError:
+                print("Coordinates must be numbers.")
+            except IndexError:
+                print("Please enter a coordinate in range in the form x y (eg. 1 0)")
+            cmd = input("Enter Realm Coordinates: \"x y\" (0 to go back)\n").strip()
+>>>>>>> b56bf1c520c5550cde2841727cfdde69005068fb
 
         #JIn will implement realm switching mechanics here. Reminder to me to change current_realm and miniAdventure_menu to corresponding Realm
         return

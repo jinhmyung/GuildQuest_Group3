@@ -21,5 +21,5 @@ class Realm:
     name: str = ""
     Coord: "RealmCoord" = None
     description: str = ""
-    difficulty = random.choice(["easy", "medium", "hard", "extreme"])
+    difficulty: str = ""
 
