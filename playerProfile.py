@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
-from ItemInventory import Inventory
+from ItemInventory import Inventory, Item, Rarity_enum, ItemType_enum
+
+# least 2 are on line 68, 67 they are lists of strings
 class Adventurer(ABC):
     def __init__(self, name:str, hp:int, attack:int):
         self.name = name
@@ -73,6 +75,16 @@ class PlayerProfile():
         self.quest_history = []
         self.inventory = Inventory()
 
+    def addItem(self):
+        name = "THE SWORD"
+        rarity = Rarity_enum[1] # change this index see the definitions in line 68 of ItemInventory.py
+        tp = ItemType_enum[1]
+        desc = "GREATE SWORD OF BUR"
+        if self.inventory == None:
+            self.inventory = Inventory()
+
+        self.inventory.AddItem(Item(name, rarity, tp, desc))
+
     def to_dict(self):
         return {
             "profile_id": self.profile_id,
@@ -81,7 +93,7 @@ class PlayerProfile():
             "char_class": self.char_class.to_dict(),
             "achievements": self.achievements,
             "quest_history": self.quest_history,
-            "inventory": self.inventory.getAllItems() #MAYBE CHANGE USING TO_DICT
+            "inventory": self.inventory.to_dict() #MAYBE CHANGE USING TO_DICT
         }
 
     def from_dict(self, data: dict):
@@ -90,7 +102,8 @@ class PlayerProfile():
         self.level = data.get("level", self.level)
         self.achievements = data.get("achievements", self.achievements)
         self.quest_history = data.get("quest_history", self.quest_history)
-        self.inventory = Inventory(data.get("inventory", self.inventory))
+        print(data.get("inventory"))
+        self.inventory = self.inventory.from_dict(data.get("inventory"))
 
         self.char_class = Adventurer.from_dict(data.get("char_class", self.char_class))
         print(self.char_class.attackMonster())

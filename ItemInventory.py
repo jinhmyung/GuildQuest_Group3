@@ -50,6 +50,19 @@ class Inventory:
     def getAllItems(self):
         # this can be printed it's just a lsit
         return self.itemsList
+    
+    def to_dict(self):
+        # this might matter if we need to save the users attack power or hp if it goes up
+        jsonList = []
+        if len(self.itemsList) > 0:
+            for item in self.itemsList:
+                jsonList.append(item.to_dict())
+        return jsonList
+    
+    def from_dict(self, data):
+        for item in data:
+            self.itemsList.append(Item(item["name"], item["rarity"], item["type"], item["description"]))
+
 
 # rarity can be removed or changed it's never really used just printed lines 27, 33, 84,
 Rarity_enum = ["common", "uncommon", "rare", "epic", "legendary"]
@@ -71,10 +84,13 @@ class Item(Entities):
                 """
         return info
 
+    def to_dict(self):
+        return {"name": self.name, "rarity": self.rarity,  "type": self.type, "description": self.description}
 
 
 
-class InventoryMenu:
+
+'''class InventoryMenu:
     """"
         we will print out the list options and index self.action with the user selection to call the correct method 
         for the inventory menu. we also pass in the inventory items as the execute options so that when the user selects
@@ -152,8 +168,8 @@ class InventoryMenu:
         return index
     
 
-    
+'''
 
-Inventory1 = Inventory([])
-menu = InventoryMenu(Inventory1)
-menu.MainMenu()
+#Inventory1 = Inventory([])
+#menu = InventoryMenu(Inventory1)
+#menu.MainMenu()

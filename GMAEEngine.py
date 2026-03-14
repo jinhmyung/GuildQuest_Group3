@@ -7,32 +7,24 @@ from playerProfile import PlayerProfile
 from user import User
 from RealmRegister import RealmRegister, RealmCoord
 import time
+        
+        
+TEST_MODE = False
 
-TEST_MODE = True
 class GMAEEngine():
     def __init__(self):
+
         self.UserManager = User()
         self.player1 = None
         self.player2 = None
-
-        self.AdventureMenu1=AdventureMenu()
-        self.AdventureMenu2=AdventureMenu()
-        self.AdventureMenu3=AdventureMenu()
-        self.AdventureMenu4=AdventureMenu()
-
         self.DictOfAdventureMenu = DictOfAdventureMenu().AM_dictionary #key: Realm, value: AdventureMenu
-        self.currentMenu = self.AdventureMenu1
+        self.currentMenu = AdventureMenu()
         self.profile_manager = ProfileManager()
         self.session = Optional[GameSession]
         
         self.realmReg = RealmRegister().realms
         self.currentRealm = self.realmReg[RealmCoord(0,0)] #Realms created in RealmRegister
         self.DictOfAdventureMenu[self.currentRealm] = self.currentMenu
-
-        for realm in self.realmReg.values():
-            self.DictOfAdventureMenu[realm] = AdventureMenu() 
-        
-
         
 
 
@@ -67,24 +59,22 @@ class GMAEEngine():
                 TEST_LOGIN = False
             
 
-            # print(f"Current Realm: {self.currentRealm.name} (x: {self.currentRealm.Coord.x}, y: {self.currentRealm.Coord.y})")
-            # print(f"Player 1: {self.player1.name if self.player1 else '(none)'}")
-            # print(f"Player 2: {self.player2.name if self.player2 else '(none)'}")
+            print(f"Current Realm: {self.currentRealm.name} (x: {self.currentRealm.Coord.x}, y: {self.currentRealm.Coord.y})")
+            print(f"Player 1: {self.player1.name if self.player1 else '(none)'}")
+            print(f"Player 2: {self.player2.name if self.player2 else '(none)'}")
 
             for num, option in enumerate(self.printOptions):
                 print(f"{num}) {option}")
             cmd = input("Choose: ").strip()
-            if cmd == "6":
-                self.view_p1_inventory()
-            elif cmd == "7":
-                self.view_p2_inventory()
-            elif cmd in self.CmdSelection.keys():
+            
+            if cmd in self.CmdSelection.keys():
                 self.CmdSelection[cmd]()
             elif cmd != "0":
                 print("Invalid option. Please enter 0, 1, 2, 3, 4, 5, 6, or 7.")
             
         print("Bye!")
     
+
     def login_attempt(self):
         # re-assigns player value 
         login_result = self.UserManager.login_cli()
@@ -102,7 +92,8 @@ class GMAEEngine():
         else:
             self.player1 = self.login_attempt()
         if self.player1:
-            print("Player 1 logged in.")
+            
+            print("Player 1 logged in mmmmm.")
 
     # this acts as an adapter and logs in player 2
     def login_Player2(self):
@@ -160,13 +151,11 @@ class GMAEEngine():
             print("Coordinates must be numbers.")
         try:
             self.currentRealm = self.realmReg[RealmCoord(x,y)]
-            self.currentMenu = self.DictOfAdventureMenu[self.currentRealm]
             print("Entered Realm Successfully")
         except Exception as E:
             print("Realm doesn't exist")
 
         #JIn will implement realm switching mechanics here. Reminder to me to change current_realm and miniAdventure_menu to corresponding Realm
-
         return
 
     def _show_inventory(self, profile, label: str) -> None:
@@ -177,6 +166,9 @@ class GMAEEngine():
             return
         print(f"Player: {profile.name}")
         inv = getattr(profile, "inventory", [])
+        # profile has self.inventory and if we call getAllItems() on it then we get a list
+        inv = inv.getAllItems()
+
         if not inv:
             print("  (empty)")
         else:
@@ -189,6 +181,8 @@ class GMAEEngine():
         input("Press Enter to continue...")
 
     def view_p1_inventory(self) -> None:
+        print(type(self.player1))
+        self.player1.addItem()
         self._show_inventory(self.player1, "P1")
 
     def view_p2_inventory(self) -> None:
