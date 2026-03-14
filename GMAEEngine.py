@@ -73,6 +73,7 @@ class GMAEEngine():
                 print("Invalid option. Please enter 0, 1, 2, 3, 4, 5, 6, or 7.")
             
         print("Bye!")
+        # might need to add code here or somewhere to save the state of inventory 
     
 
     def login_attempt(self):
@@ -147,20 +148,6 @@ class GMAEEngine():
 
     def move_realms(self): #
         self.show_realms()
-<<<<<<< HEAD
-        cmd = input("Enter Realm Coordinates: \"x y\"\n").strip()
-        try:
-            coord = cmd.split()
-            x = int(coord[0])
-            y = int(coord[1])
-        except ValueError:
-            print("Coordinates must be numbers.")
-        try:
-            self.currentRealm = self.realmReg[RealmCoord(x,y)]
-            print("Entered Realm Successfully")
-        except Exception as E:
-            print("Realm doesn't exist")
-=======
         cmd = input("Enter Realm Coordinates: \"x y\" (0 to go back)\n").strip()
         while cmd != "0":
             try:
@@ -179,7 +166,6 @@ class GMAEEngine():
             except IndexError:
                 print("Please enter a coordinate in range in the form x y (eg. 1 0)")
             cmd = input("Enter Realm Coordinates: \"x y\" (0 to go back)\n").strip()
->>>>>>> b56bf1c520c5550cde2841727cfdde69005068fb
 
         #JIn will implement realm switching mechanics here. Reminder to me to change current_realm and miniAdventure_menu to corresponding Realm
         return
@@ -207,7 +193,6 @@ class GMAEEngine():
         input("Press Enter to continue...")
 
     def view_p1_inventory(self) -> None:
-        print(type(self.player1))
         self.player1.addItem()
         self._show_inventory(self.player1, "P1")
 

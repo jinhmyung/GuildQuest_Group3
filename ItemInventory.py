@@ -165,15 +165,5 @@ class Item(Entities):
         if index > len(self.app.getAllItems()) - 1:
             print("invalid selection default realm has been selected`")
             return 0
-<<<<<<< HEAD
         return index
-    
-
 '''
-
-#Inventory1 = Inventory([])
-#menu = InventoryMenu(Inventory1)
-#menu.MainMenu()
-=======
-        return index
->>>>>>> b56bf1c520c5550cde2841727cfdde69005068fb

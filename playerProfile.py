@@ -82,10 +82,11 @@ class PlayerProfile():
         desc = "GREATE SWORD OF BUR"
         if self.inventory == None:
             self.inventory = Inventory()
-
-        self.inventory.AddItem(Item(name, rarity, tp, desc))
+        item1 = Item(name, rarity, tp, desc)
+        self.inventory.AddItem(item1)
 
     def to_dict(self):
+        print("inventory", self.inventory.to_dict())
         return {
             "profile_id": self.profile_id,
             "name": self.name,
