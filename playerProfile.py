@@ -75,15 +75,10 @@ class PlayerProfile():
         self.quest_history = []
         self.inventory = Inventory()
 
-    def addItem(self):
-        name = "THE SWORD"
-        rarity = Rarity_enum[1] # change this index see the definitions in line 68 of ItemInventory.py
-        tp = ItemType_enum[1]
-        desc = "GREATE SWORD OF BUR"
-        if self.inventory == None:
-            self.inventory = Inventory()
-        item1 = Item(name, rarity, tp, desc)
-        self.inventory.AddItem(item1)
+    def addItem(self, item: Item):
+        print(item)
+        print(self.inventory)
+        self.inventory.AddItem(item)
 
     def to_dict(self):
         print("inventory", self.inventory.to_dict())
@@ -104,10 +99,10 @@ class PlayerProfile():
         self.achievements = data.get("achievements", self.achievements)
         self.quest_history = data.get("quest_history", self.quest_history)
         print(data.get("inventory"))
-        self.inventory = self.inventory.from_dict(data.get("inventory"))
-
+        print(self.inventory)
+        self.inventory.from_dict(data.get("inventory", self.inventory))
+        print(f"RETRIEVE DATA {self.inventory}")
         self.char_class = Adventurer.from_dict(data.get("char_class", self.char_class))
-        print(self.char_class.attackMonster())
 
 
     

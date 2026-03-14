@@ -1,6 +1,7 @@
 from miniAdventure import MiniAdventure
 from playerProfile import PlayerProfile
 from ItemInventory import Item
+from profileManager import pm
 from realm import Realm
 import random
 
@@ -156,6 +157,10 @@ class MobHunt(MiniAdventure):
             self.status_bar_cli()
             if self.is_finished():
                 print(f"Adventure finished! Result: {self.get_result()}")
+                self.player1.addItem(self.monster.drop)
+                self.player2.addItem(self.monster.drop)
+                pm.save(self.player1.profile_id, self.player1)
+                pm.save(self.player2.profile_id, self.player2)
                 return
             if self.turn == 1:
                 self.player_turn_cli(self.player1)

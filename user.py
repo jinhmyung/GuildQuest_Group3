@@ -36,7 +36,7 @@ class User():
             "password": password
         }
         with open(self.JsonFilePath, "w") as f:
-            json.dump(data, f)
+            json.dump(data, f, indent = 2)
         return True
         
     def login(self, username: str, password: str) -> int:

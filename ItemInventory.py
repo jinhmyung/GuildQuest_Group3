@@ -32,8 +32,11 @@ class Entities(ABC):
         pass
 
 class Inventory:
-    def __init__(self, tms:list = []):
-        self.itemsList = tms   
+    def __init__(self, tms=None):
+        if tms is None:
+            self.itemsList = []
+        else:
+            self.itemsList = tms
     
     def AddItem(self, item_obj):
         self.itemsList.append(item_obj)
@@ -60,8 +63,11 @@ class Inventory:
         return jsonList
     
     def from_dict(self, data):
+        self.itemsList = []  # clear inventory first
         for item in data:
-            self.itemsList.append(Item(item["name"], item["rarity"], item["type"], item["description"]))
+            self.itemsList.append(
+                Item(item["name"], item["rarity"], item["type"], item["description"])
+            )
 
 
 # rarity can be removed or changed it's never really used just printed lines 27, 33, 84,

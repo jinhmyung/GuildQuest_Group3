@@ -193,7 +193,6 @@ class GMAEEngine():
         input("Press Enter to continue...")
 
     def view_p1_inventory(self) -> None:
-        self.player1.addItem()
         self._show_inventory(self.player1, "P1")
 
     def view_p2_inventory(self) -> None:
