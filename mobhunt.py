@@ -8,12 +8,38 @@ import random
 #CREATE SOME RANDOM MONSTER BASED ON REALM DIFFICULTY
 class MonsterFactory:
 
+    #SECURITY PATTERN: Public fields only for final attributes that can’t change (Changed all public fields in monster to Final )
     class Monster:
         def __init__(self, name: str, hp: int, attack: int, drop: Item):
-            self.name = name
-            self.hp = hp
-            self.attack = attack
-            self.drop = drop
+            self._name = name
+            self._hp = hp
+            self._attack = attack
+            self._drop = drop
+
+        # FINAL FIELDS (read-only)
+        @property
+        def name(self):
+            return self._name
+
+        @property
+        def attack(self):
+            return self._attack
+
+        @property
+        def drop(self):
+            return self._drop
+
+        # MUTABLE FIELD WITH VALIDATION
+        @property
+        def hp(self):
+            return self._hp
+
+        @hp.setter
+        def hp(self, value: int):
+            if value < 0:
+                self._hp = 0
+            else:
+                self._hp = value
 
 
 
