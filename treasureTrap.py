@@ -4,20 +4,40 @@ from miniAdventure import MiniAdventure
 from realm import Realm
 import random
 
-# Item types and rarities (stored in PlayerProfile.inventory as dicts)
-ITEM_TYPES = ["gold_coin", "sword", "bomb"]
+# Item types and rarities
+ITEM_TYPES = ["gold_coin", "sword", "diamond", "ancient_ring", "silver_key", "old_map", "gemstone_shard", "guild_medal"]
 RARITIES = ["common", "uncommon", "rare", "legendary"]
-ITEM_NAMES = {"gold_coin": "Gold Coin", "sword": "Sword", "bomb": "Bomb"}
+ITEM_NAMES = {"gold_coin": "Gold Coin", "sword": "Old Sword", "diamond": "Rough Diamond", "ancient_ring": "Ancient Ring", "silver_key": "Silver Key", "old_map": "Old Map", "gemstone_shard": "Gemstone Shard", "guild_medal": "Guild Medal"}
 
 
 class Item:
-    """Treasure item: gold_coin, sword, or bomb. Stored in profile.inventory as to_dict()."""
+    """Treasure item stored in PlayerProfile.inventory as dict."""
     def __init__(self, item_type: str, rarity: str, description: str = ""):
         self.item_type = item_type
         self.rarity = rarity
         self.name = ITEM_NAMES.get(item_type, item_type)
-        self.description = description or f"{self.name} ({rarity})"
-
+    
+        if description:
+            self.description = description
+        elif item_type == "gold_coin":
+            self.description = f"A small gold coin, slightly worn. ({rarity})"
+        elif item_type == "sword":
+            self.description = f"An old sword with a few nicks in the blade. ({rarity})"
+        elif item_type == "diamond":
+            self.description = f"A rough diamond that still catches the light. ({rarity})"
+        elif item_type == "ancient_ring":
+            self.description = f"A bronze ring with faded runes carved on the inside. ({rarity})"
+        elif item_type == "silver_key":
+            self.description = f"A small silver key with no matching lock in sight. ({rarity})"
+        elif item_type == "old_map":
+            self.description = f"A creased map that shows a path fading into an unmarked forest. ({rarity})"
+        elif item_type == "gemstone_shard":
+            self.description = f"A shard chipped from a larger gem. It still sparkles a little. ({rarity})"
+        elif item_type == "guild_medal":
+            self.description = f'A worn Guild medal given long ago for "services rendered". ({rarity})'
+        else:
+            self.description = f"{self.name} ({rarity})"
+        
     def to_dict(self):
         return {
             "name": self.name,
@@ -73,9 +93,9 @@ class Cell:
         self.row = row
         self.col = col
         self.has_treasure = False
-        self.treasure_item = None  # Item or None (what you get when you step on T)
-        self.trap = None  # Trap or None
-        self.occupant = None  # Player or None
+        self.treasure_item = None  
+        self.trap = None 
+        self.occupant = None  
 
     def is_empty(self) -> bool:
         return not self.has_treasure and self.trap is None and self.occupant is None
@@ -171,9 +191,9 @@ class GridMapAdapter:
 class TreasureTrapAdventure(MiniAdventure):
     def __init__(self, player1, player2, id: str, realm: Realm):
         super().__init__(id)
-        self.profile1 = player1  # from GuildQuest (name, level, etc)
+        self.profile1 = player1 
         self.profile2 = player2
-        self.player1 = None  # on map (position, treasure, etc)
+        self.player1 = None  
         self.player2 = None
         self.grid = None
         self.adapter = None
@@ -196,11 +216,23 @@ class TreasureTrapAdventure(MiniAdventure):
     def apply_cell_effect(self, player):
         cell = self.grid.get_cell(player.row, player.col)
         if cell.has_treasure and cell.treasure_item is not None:
+            # increase game player's treasure count
             player.add_treasure()
             item = cell.treasure_item
-            profile = self.profile1 if player is self.player1 else self.profile2
-            profile.inventory.append(item.to_dict())
-            print(f"  -> You got: {item.name} ({item.rarity})! Added to your inventory.")
+            # also give the item to the player's Inventory (if possible)
+            try:
+                from ItemInventory import Item as InvItem
+                profile = self.profile1 if player is self.player1 else self.profile2
+                # drop the trailing "(rarity)" from description for inventory view
+                desc = item.description
+                suffix = f" ({item.rarity})"
+                if desc.endswith(suffix):
+                    desc = desc[:-len(suffix)]
+                inv_item = InvItem(item.name, item.rarity, description=desc)
+                profile.addItem(inv_item)
+            except Exception:
+                # if inventory system changes or fails, still continue the game
+                pass
             self.adapter.remove_treasure(player.row, player.col)
         if cell.trap is not None:
             cell.trap.activate(player)
@@ -221,31 +253,41 @@ class TreasureTrapAdventure(MiniAdventure):
             print("  -> You ended the game early. It's a draw!")
             return
         if choice == "1":
-            direction = input("up/down/left/right? ").strip().lower()
-            if direction == "up":
-                new_row, new_col = player.row - 1, player.col
-            elif direction == "down":
-                new_row, new_col = player.row + 1, player.col
-            elif direction == "left":
-                new_row, new_col = player.row, player.col - 1
-            elif direction == "right":
-                new_row, new_col = player.row, player.col + 1
-            else:
-                print("Invalid")
-                return
-            if self.adapter.is_valid(new_row, new_col) and self.grid.get_cell(new_row, new_col).occupant is None:
+            while True:
+                direction = input("up/down/left/right? ").strip().lower()
+                if direction == "up":
+                    new_row, new_col = player.row - 1, player.col
+                elif direction == "down":
+                    new_row, new_col = player.row + 1, player.col
+                elif direction == "left":
+                    new_row, new_col = player.row, player.col - 1
+                elif direction == "right":
+                    new_row, new_col = player.row, player.col + 1
+                else:
+                    print("  -> Invalid direction. Try again.")
+                    continue
+                if not self.adapter.is_valid(new_row, new_col):
+                    print("  -> Invalid move (out of map). Try again.")
+                    continue
+                if self.grid.get_cell(new_row, new_col).occupant is not None:
+                    print("  -> Invalid move (cell occupied). Try again.")
+                    continue
                 self.adapter.move_player(player, new_row, new_col)
                 self.apply_cell_effect(player)
+                break
         elif choice == "2":
-            try:
-                row = int(input("Row (0-4): ").strip())
-                col = int(input("Col (0-4): ").strip())
+            while True:
+                try:
+                    row = int(input("Row (0-4): ").strip())
+                    col = int(input("Col (0-4): ").strip())
+                except ValueError:
+                    print("  -> Invalid number. Try again.")
+                    continue
                 if self.adapter.place_trap(row, col):
                     print("Trap placed!")
+                    break
                 else:
-                    print("Cannot place trap there (occupied or has treasure/trap).")
-            except ValueError:
-                print("Invalid number.")
+                    print("  -> Cannot place trap there (player/treasure/trap on cell). Try again.")
         elif choice == "3":
             print("You skip this turn.")
 
@@ -335,4 +377,3 @@ class TreasureTrapAdventure(MiniAdventure):
             pm.save(self.profile2.profile_id, self.profile2)
         except Exception:
             pass
-
