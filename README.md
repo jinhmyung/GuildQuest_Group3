@@ -130,11 +130,11 @@ Player a mini Game:
         5) Move Realm
         6) View P1 inventory
         7) View P2 inventory
->>>>>>> Choose: 4           # INPUT 4
+		Choose: 4           # INPUT 4
         what would you like to do? (enter 0 to end) :
         1 : Mob Hunt
         2 : Treasure Trap
->>>>>>> 1            # SELECT MINIGAME
+		1            # SELECT MINIGAME
         selected result Mob Hunt
 
         ==============================
@@ -150,7 +150,7 @@ Player a mini Game:
         1. Attack
         2. Heavy Attack
         3. Special Attack
->>>>>>> Enter your choice (1-3): 1
+		Enter your choice (1-3): 1
         John attacks for 10 damage!
 
         ==============================
