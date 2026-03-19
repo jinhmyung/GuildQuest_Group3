@@ -11,7 +11,7 @@ ITEM_NAMES = {"gold_coin": "Gold Coin", "sword": "Old Sword", "diamond": "Rough 
 
 
 class Item:
-    #Treasure item; can be saved to PlayerProfile.inventory as dict.
+    #Represnet as treasure item; can be saved to PlayerProfile.inventory as dict.
     def __init__(self, item_type: str, rarity: str, description: str = ""):
         self.item_type = item_type
         self.rarity = rarity
@@ -48,6 +48,7 @@ class Item:
 
     @staticmethod
     def from_dict(d: dict) -> "Item":
+        #Restore item from dict
         return Item(
             d.get("item_type", "gold_coin"),
             d.get("rarity", "common"),
@@ -56,7 +57,7 @@ class Item:
 
     @staticmethod
     def random_item() -> "Item":
-        # pick random type + rarity for each treasure on the map
+        #Pick random type and rarity for treasures placed on the map.
         t = random.choice(ITEM_TYPES)
         r = random.choice(RARITIES)
         return Item(t, r)
@@ -85,6 +86,7 @@ class Player:
 
 
 class Trap:
+    #When stepped on, the target player skip their next turn.
     def activate(self, target: Player) -> None:
         target.skip_turn()
 
@@ -104,6 +106,7 @@ class Cell:
 
 
 class GridMap:
+    #handles placement of treasures and basic bounds checking. 
     def __init__(self, width: int, height: int):
         self.width = width
         self.height = height
@@ -129,7 +132,9 @@ class GridMap:
 
 
 class GridMapAdapter:
-    #Wraps GridMap to handle moves, traps, and rendering.
+    #placing/removing traps and treasures
+    #  rendering the map as text (1, 2, T, X, .).
+    
     def __init__(self, adaptee: GridMap):
         self.adaptee = adaptee
 
@@ -137,12 +142,14 @@ class GridMapAdapter:
         return self.adaptee.is_inside(row, col)
 
     def is_empty_for_trap(self, row: int, col: int) -> bool:
+        #True if cell is valid and has no player, treasure, or trap
         if not self.is_valid(row, col):
             return False
         cell = self.adaptee.get_cell(row, col)
         return cell.occupant is None and not cell.has_treasure and cell.trap is None
 
     def move_player(self, player: Player, new_row: int, new_col: int) -> None:
+        #Move player from current cell to new cell; clear old cell.
         if not self.is_valid(new_row, new_col):
             return
         old_cell = self.adaptee.get_cell(player.row, player.col)
@@ -153,6 +160,8 @@ class GridMapAdapter:
         player.move_to(new_row, new_col)
 
     def place_trap(self, row: int, col: int) -> bool:
+        #Place trap on cell
+        # returns False if cell is invalid.
         if not self.is_empty_for_trap(row, col):
             return False
         self.adaptee.get_cell(row, col).trap = Trap()
@@ -172,6 +181,7 @@ class GridMapAdapter:
         cell.treasure_item = None
 
     def render(self, player1: Player, player2: Player) -> str:
+        #1=P1, 2=P2, T=treasure, X=trap, .=empty.
         lines = []
         for r in range(self.adaptee.height):
             row_str = ""
@@ -192,6 +202,9 @@ class GridMapAdapter:
 
 
 class TreasureTrapAdventure(MiniAdventure):
+    #Sets up the grid, runs the turn loop
+    # handles player input. Connects game state (Player, GridMap) to profiles
+    
     def __init__(self, player1, player2, id: str, realm: Realm):
         super().__init__(id)
         self.profile1 = player1 
@@ -205,6 +218,7 @@ class TreasureTrapAdventure(MiniAdventure):
         self.realm = realm
 
     def initialize(self):
+        #Create 5x5 grid, spawn both players, place 5 random treasures.
         self.grid = GridMap(5, 5)
         self.adapter = GridMapAdapter(self.grid)
         self.player1 = Player(getattr(self.profile1, "name", "P1"))
@@ -218,6 +232,10 @@ class TreasureTrapAdventure(MiniAdventure):
         self.turn = 1
 
     def apply_cell_effect(self, player):
+        #Called after a move. 
+        # If player landed on treasure: add to count, print item info, add to profile inventory, remove from map. 
+        # If trap: skip next turn.
+        
         cell = self.grid.get_cell(player.row, player.col)
         if cell.has_treasure and cell.treasure_item is not None:
             player.add_treasure()
@@ -243,13 +261,14 @@ class TreasureTrapAdventure(MiniAdventure):
             self.adapter.remove_trap(player.row, player.col)
 
     def check_win(self):
-        # first to 3 treasures wins
+        #Update outcome when a player reaches 3 treasures.
         if self.player1.treasure_count >= 3:
             self.outcome = "P1 wins"
         elif self.player2.treasure_count >= 3:
             self.outcome = "P2 wins"
 
     def player_turn_cli(self, player):
+        #Handle one turn: move, trap, skip, or exit. Re-prompts if invalid input.
         label = "P1" if player is self.player1 else "P2"
         print(f"\n{label} ({player.name})'s turn")
         while True:  # re-prompt until valid choice 
@@ -339,6 +358,7 @@ class TreasureTrapAdventure(MiniAdventure):
         self.turn = 1
 
     def start_adventure(self):
+        #init game, print rules, run main loop until win/draw, then save profiles.
         self.initialize()
         print("\n==============================")
         print("Treasure & Trap")
@@ -347,7 +367,7 @@ class TreasureTrapAdventure(MiniAdventure):
         print("  1) Move one step (up/down/left/right)")
         print("  2) Place a trap on an empty cell")
         print("  3) Skip your turn")
-        print("  4) Exit - return to main menu, game counts as draw (平局)")
+        print("  4) Exit - return to main menu, game counts as draw")
         print("Treasures (T) are items: Gold Coin, Sword, or Bomb (random rarity).")
         print("They go to your inventory. If you step on a trap (X), you skip your next turn!")
         print("First to 3 treasures wins! View your inventory from the main menu after the game.")
