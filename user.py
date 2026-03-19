@@ -12,7 +12,6 @@ class User():
         self.fileName = fileName
         self.profile_manager = ProfileManager()
         self.JsonFilePath = os.path.join(os.getcwd(), fileName)
-        self.TestBoolPlayer1 = True
 
 
     def create_user(self, username: str, password: str) -> None:
@@ -50,21 +49,6 @@ class User():
                 return self.profile_manager.load(profile_id)
         return False
 
-    def TEST_LOGIN(self):
-        """remove this when we submit it is so we don't have to login every time"""
-        if self.TestBoolPlayer1:
-            self.TestBoolPlayer1 = False
-            return self.login("ydureix", "something123")
-        else:
-            return self.login("Criminal", "crimes123")
-
-    def TEST_LOGIN_P1(self):
-        """Always log in as player 1 test account (ydureix/John)."""
-        return self.login("ydureix", "something123")
-
-    def TEST_LOGIN_P2(self):
-        """Always log in as player 2 test account (Criminal/Crime)."""
-        return self.login("Criminal", "crimes123")
 
 
         

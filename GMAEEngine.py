@@ -3,20 +3,19 @@ from typing import Optional
 from adventure import AdventureMenu, DictOfAdventureMenu
 from profileManager import ProfileManager
 from gameSession import GameSession
-from playerProfile import PlayerProfile
+from playerProfile import PlayerProfile, NullPlayerProfile
 from user import User
 from RealmRegister import RealmRegister, RealmCoord
 import time
         
         
-TEST_MODE = False
 
 class GMAEEngine():
     def __init__(self):
 
         self.UserManager = User()
-        self.player1 = None
-        self.player2 = None
+        self.player1 = NullPlayerProfile()      # Introduce Null Object
+        self.player2 = NullPlayerProfile()      # Introduce Null Object
         self.DictOfAdventureMenu = DictOfAdventureMenu().AM_dictionary #key: Realm, value: AdventureMenu
         self.currentMenu = AdventureMenu()
         self.profile_manager = ProfileManager()
@@ -49,19 +48,14 @@ class GMAEEngine():
         while cmd != "0":
             print("\n==============================")
             print("GuildQuest CLI")
-            print("TEST MODE SET UP")
             print("==============================")
             
-            # TEST MODE REMOVE BEDORE SUBMITING
-            if TEST_MODE:
-                self.login_Player1()
-                self.login_Player2()
-                TEST_LOGIN = False
-            
+
+
 
             print(f"Current Realm: {self.currentRealm.name} (x: {self.currentRealm.Coord.x}, y: {self.currentRealm.Coord.y})")
-            print(f"Player 1: {self.player1.name if self.player1 else '(none)'}")
-            print(f"Player 2: {self.player2.name if self.player2 else '(none)'}")
+            print(f"Player 1: {self.player1.name}")
+            print(f"Player 2: {self.player2.name}")
 
             for num, option in enumerate(self.printOptions):
                 print(f"{num}) {option}")
@@ -80,28 +74,23 @@ class GMAEEngine():
         # re-assigns player value 
         login_result = self.UserManager.login_cli()
         if login_result:
+            print(type(login_result))
             time.sleep(2) # put this here becuase I want the user to see the result not scroll to see it 
             return login_result
         else:
             print("login failed please try again later")
-            return None
+            return NullPlayerProfile()
     
     # this acts as an adapter and logs in player 1
     def login_Player1(self):
-        if TEST_MODE:
-            self.player1 = self.UserManager.TEST_LOGIN_P1()
-        else:
-            self.player1 = self.login_attempt()
+        self.player1 = self.login_attempt()
         if self.player1:
             
-            print("Player 1 logged in mmmmm.")
+            print("Player 1 logged")
 
     # this acts as an adapter and logs in player 2
     def login_Player2(self):
-        if TEST_MODE:
-            self.player2 = self.UserManager.TEST_LOGIN_P2()
-        else:
-            self.player2 = self.login_attempt()
+        self.player2 = self.login_attempt()
         if self.player2:
             print("Player 2 logged in.")
 
@@ -172,7 +161,8 @@ class GMAEEngine():
 
     def _show_inventory(self, profile, label: str) -> None:
         print(f"\n----- {label} Inventory -----")
-        if profile is None:
+
+        if not profile:
             print(f"{label} is not logged in.")
             input("Press Enter to continue...")
             return

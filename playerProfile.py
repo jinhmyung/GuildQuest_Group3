@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from ItemInventory import Inventory, Item, Rarity_enum, ItemType_enum
+from typing_extensions import override
 
 # least 2 are on line 68, 67 they are lists of strings
 class Adventurer(ABC):
@@ -15,11 +16,7 @@ class Adventurer(ABC):
     def to_dict(self):
         # this might matter if we need to save the users attack power or hp if it goes up
         return {"name": self.name}
-        """return {
-            "name": self.name,
-            "hp": self.hp,
-            "attack": self.attack,
-        }"""
+
     
     @staticmethod
     def from_dict(data):
@@ -29,14 +26,6 @@ class Adventurer(ABC):
         else: 
             ChildObj = classes[data]()
 
-        # we might care about these if attack or hp ever go up>
-        """
-                if isinstance(data, str):
-            ChildObj = classes[data]()
-        ChildObj.name = data.get("name", ChildObj.name)
-        ChildObj.hp = data.get("hp", ChildObj.hp)
-        ChildObj.attack = data.get("hp", ChildObj.attack)
-        """
         return ChildObj
 
 
@@ -103,8 +92,6 @@ class PlayerProfile():
         self.inventory.from_dict(data.get("inventory", self.inventory))
         print(f"RETRIEVE DATA {self.inventory}")
         self.char_class = Adventurer.from_dict(data.get("char_class", self.char_class))
-
-
     
     def create_player_cli(self):
         print("\n==============================")
@@ -137,3 +124,28 @@ class PlayerProfile():
 
     def __str__(self):
         return str(self.to_dict())
+
+class NullPlayerProfile(PlayerProfile):
+    @override
+    def __init__(self):
+        self.name = "(none)"
+
+    def __bool__(self):
+        return False
+    @override
+    def addItem(self, item: Item):
+        return None
+    @override
+    def to_dict(self):
+        return {}
+    @override
+    def from_dict(self, data: dict):
+        return None
+    @override
+    def create_player_cli(self):
+        return self
+    @override
+    def __str__(self):
+        return "(none)"
+    
+    
