@@ -16,11 +16,7 @@ class Adventurer(ABC):
     def to_dict(self):
         # this might matter if we need to save the users attack power or hp if it goes up
         return {"name": self.name}
-        """return {
-            "name": self.name,
-            "hp": self.hp,
-            "attack": self.attack,
-        }"""
+
     
     @staticmethod
     def from_dict(data):
@@ -30,14 +26,6 @@ class Adventurer(ABC):
         else: 
             ChildObj = classes[data]()
 
-        # we might care about these if attack or hp ever go up>
-        """
-                if isinstance(data, str):
-            ChildObj = classes[data]()
-        ChildObj.name = data.get("name", ChildObj.name)
-        ChildObj.hp = data.get("hp", ChildObj.hp)
-        ChildObj.attack = data.get("hp", ChildObj.attack)
-        """
         return ChildObj
 
 
@@ -144,7 +132,6 @@ class NullPlayerProfile(PlayerProfile):
 
     def __bool__(self):
         return False
-
     @override
     def addItem(self, item: Item):
         return None
