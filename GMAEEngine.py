@@ -156,7 +156,7 @@ class GMAEEngine():
                 y = int(coord[1])
                 try:
                     self.currentRealm = self.realmReg[RealmCoord(x,y)]
-                    self.currentMenu = self.DictOfAdventureMenu[self.currentRealm]
+                    # self.currentMenu = self.DictOfAdventureMenu[self.currentRealm]
                     print("Entered Realm Successfully")
                     break
                 except Exception as E:

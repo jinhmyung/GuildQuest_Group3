@@ -17,7 +17,6 @@ class RealmCoord:
 
 @dataclass(frozen=True)
 class Realm:
-    realm_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     name: str = ""
     Coord: "RealmCoord" = None
     description: str = ""

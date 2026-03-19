@@ -4,7 +4,7 @@ class MiniAdventure(ABC):
 
     def __init__(self, id: str): # for the trigger_adventureID in realm.py
         self.id = id
-
+        
     @abstractmethod
     def initialize(self): 
         return

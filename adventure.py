@@ -11,7 +11,7 @@ class AdventureFactory():
     def __init__(self):
         self.registry = {"Mob Hunt": MobHunt, "Treasure Trap": TreasureTrapAdventure} 
         self.adventureName = ""
-        self.adventureID = 0
+        # self.adventureID = 0
     
     def getName(self):
         return self.adventureName
@@ -50,9 +50,9 @@ class AdventureMenu():
     # the args are player1 player2 and gameID not sure what that does. 
         self.factory.create(choice, *args).start_adventure()
 
-@dataclass
-class DictOfAdventureMenu:
-    AM_dictionary: dict[Realm, "AdventureMenu"] = field(default_factory=dict)
+# @dataclass
+# class DictOfAdventureMenu:
+#     AM_dictionary: dict[Realm, "AdventureMenu"] = field(default_factory=dict)
 
-    def add_menu(self, realm: Realm, menu: "AdventureMenu"):
-        self.AM_dictionary[realm] = menu
+#     def add_menu(self, realm: Realm, menu: "AdventureMenu"):
+#         self.AM_dictionary[realm] = menu
