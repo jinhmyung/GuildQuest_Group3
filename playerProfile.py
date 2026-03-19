@@ -65,12 +65,10 @@ class PlayerProfile():
         self.inventory = Inventory()
 
     def addItem(self, item: Item):
-        print(item)
-        print(self.inventory)
+
         self.inventory.AddItem(item)
 
     def to_dict(self):
-        print("inventory", self.inventory.to_dict())
         return {
             "profile_id": self.profile_id,
             "name": self.name,
@@ -87,10 +85,7 @@ class PlayerProfile():
         self.level = data.get("level", self.level)
         self.achievements = data.get("achievements", self.achievements)
         self.quest_history = data.get("quest_history", self.quest_history)
-        print(data.get("inventory"))
-        print(self.inventory)
         self.inventory.from_dict(data.get("inventory", self.inventory))
-        print(f"RETRIEVE DATA {self.inventory}")
         self.char_class = Adventurer.from_dict(data.get("char_class", self.char_class))
     
     def create_player_cli(self):

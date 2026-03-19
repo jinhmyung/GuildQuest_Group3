@@ -3,19 +3,37 @@
     "profile_id": "ydureix_2977",
     "name": "John",
     "level": 1,
-    "char_class": "Rogue",
+    "char_class": {
+      "name": "Rogue"
+    },
     "achievements": [],
     "quest_history": [],
-    "inventory": []
+    "inventory": [
+      {
+        "name": "Teeth",
+        "rarity": "uncommon",
+        "type": "Tools",
+        "description": "Sharp teeth"
+      }
+    ]
   },
   "Criminal_3215": {
     "profile_id": "Criminal_3215",
     "name": "Crime",
     "level": 1,
-    "char_class": "Warrior",
+    "char_class": {
+      "name": "Warrior"
+    },
     "achievements": [],
     "quest_history": [],
-    "inventory": []
+    "inventory": [
+      {
+        "name": "Teeth",
+        "rarity": "uncommon",
+        "type": "Tools",
+        "description": "Sharp teeth"
+      }
+    ]
   },
   "jin_7575": {
     "profile_id": "jin_7575",

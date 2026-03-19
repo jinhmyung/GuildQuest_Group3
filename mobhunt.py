@@ -141,7 +141,6 @@ class MobHunt(MiniAdventure):
     #RANDOMLY SELECT AN ATTACK -- SAME AS PLAYER INPUT
     def monsterRNG(self, player: PlayerProfile):
         random_number = random.randint(1, 3)
-        print(random_number)
         if random_number == 1:
             hit_chance = random.randint(1, 100)
             if hit_chance <= 90:

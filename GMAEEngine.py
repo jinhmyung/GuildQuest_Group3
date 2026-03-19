@@ -74,7 +74,6 @@ class GMAEEngine():
         # re-assigns player value 
         login_result = self.UserManager.login_cli()
         if login_result:
-            print(type(login_result))
             time.sleep(2) # put this here becuase I want the user to see the result not scroll to see it 
             return login_result
         else:
