@@ -70,6 +70,7 @@ View Player Inventory:
 
 
 Player a mini Game:
+
     STEP 1. login user 1 
     STEP 2. login user 2
     STEP 3. MiniAdventure Menu 
@@ -82,26 +83,20 @@ Player a mini Game:
         choose a password: crimes123
         Choose: 4
         what would you like to do? (enter 0 to end) : 1
+
 	# Inside Mobhunt MiniGame
 # select options to attack until monster is killed or player is killed and get
 
 
 
 
-
-
-
-
-
-
-
-
-
 View Player Inventory: 
+
 	Step 1: login player 1 or player 2 depending on which players inventory you wish to view 
 	Ex. player 2’s inventory 
 	
 Player a mini Game:
+
     1. login user 1 
     2. login user 2
     3. MiniAdventure Menu 
