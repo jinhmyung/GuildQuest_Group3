@@ -5,6 +5,7 @@ In order to start running:
 Change Realm’s to change miniGame difficulty/Monster:
 	All inputs are inside the green box in the google drive version we have images !!!
 ---------------EXAMPLE-------------------
+
         ==============================
         GuildQuest CLI
         ==============================
@@ -41,6 +42,7 @@ View Player Inventory:
 
 
 ---------------EXAMPLE-------------------
+
         ==============================      
         GuildQuest CLI
         ==============================      
@@ -116,6 +118,7 @@ Player a mini Game:
 # select options to attack until monster is killed or player is killed and get
 
 ---------------EXAMPLE-------------------
+
         ==============================
         GuildQuest CLI
         ==============================
