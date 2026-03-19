@@ -11,7 +11,7 @@ ITEM_NAMES = {"gold_coin": "Gold Coin", "sword": "Old Sword", "diamond": "Rough 
 
 
 class Item:
-    """Treasure item stored in PlayerProfile.inventory as dict."""
+    #Treasure item; can be saved to PlayerProfile.inventory as dict.
     def __init__(self, item_type: str, rarity: str, description: str = ""):
         self.item_type = item_type
         self.rarity = rarity
@@ -56,6 +56,7 @@ class Item:
 
     @staticmethod
     def random_item() -> "Item":
+        # pick random type + rarity for each treasure on the map
         t = random.choice(ITEM_TYPES)
         r = random.choice(RARITIES)
         return Item(t, r)
@@ -89,6 +90,7 @@ class Trap:
 
 
 class Cell:
+    #One grid -> can hold treasure, trap, or player.
     def __init__(self, row: int, col: int):
         self.row = row
         self.col = col
@@ -127,6 +129,7 @@ class GridMap:
 
 
 class GridMapAdapter:
+    #Wraps GridMap to handle moves, traps, and rendering.
     def __init__(self, adaptee: GridMap):
         self.adaptee = adaptee
 
@@ -206,6 +209,7 @@ class TreasureTrapAdventure(MiniAdventure):
         self.adapter = GridMapAdapter(self.grid)
         self.player1 = Player(getattr(self.profile1, "name", "P1"))
         self.player2 = Player(getattr(self.profile2, "name", "P2"))
+        # P1 at top-left, P2 at bottom-right
         self.grid.get_cell(0, 0).occupant = self.player1
         self.player1.move_to(0, 0)
         self.grid.get_cell(4, 4).occupant = self.player2
@@ -216,14 +220,14 @@ class TreasureTrapAdventure(MiniAdventure):
     def apply_cell_effect(self, player):
         cell = self.grid.get_cell(player.row, player.col)
         if cell.has_treasure and cell.treasure_item is not None:
-            # increase game player's treasure count
             player.add_treasure()
             item = cell.treasure_item
-            # also give the item to the player's Inventory (if possible)
+            print(f"  -> Found: {item.name} ({item.rarity})")
+            print(f"     {item.description}")
+            # also give the item to the player's Inventory
             try:
                 from ItemInventory import Item as InvItem
                 profile = self.profile1 if player is self.player1 else self.profile2
-                # drop the trailing "(rarity)" from description for inventory view
                 desc = item.description
                 suffix = f" ({item.rarity})"
                 if desc.endswith(suffix):
@@ -239,6 +243,7 @@ class TreasureTrapAdventure(MiniAdventure):
             self.adapter.remove_trap(player.row, player.col)
 
     def check_win(self):
+        # first to 3 treasures wins
         if self.player1.treasure_count >= 3:
             self.outcome = "P1 wins"
         elif self.player2.treasure_count >= 3:
@@ -247,49 +252,55 @@ class TreasureTrapAdventure(MiniAdventure):
     def player_turn_cli(self, player):
         label = "P1" if player is self.player1 else "P2"
         print(f"\n{label} ({player.name})'s turn")
-        choice = input("1.Move 2.Trap 3.Skip 4.Exit: ").strip()
-        if choice == "4":
-            self.outcome = "DRAW"
-            print("  -> You ended the game early. It's a draw!")
-            return
-        if choice == "1":
-            while True:
-                direction = input("up/down/left/right? ").strip().lower()
-                if direction == "up":
-                    new_row, new_col = player.row - 1, player.col
-                elif direction == "down":
-                    new_row, new_col = player.row + 1, player.col
-                elif direction == "left":
-                    new_row, new_col = player.row, player.col - 1
-                elif direction == "right":
-                    new_row, new_col = player.row, player.col + 1
-                else:
-                    print("  -> Invalid direction. Try again.")
-                    continue
-                if not self.adapter.is_valid(new_row, new_col):
-                    print("  -> Invalid move (out of map). Try again.")
-                    continue
-                if self.grid.get_cell(new_row, new_col).occupant is not None:
-                    print("  -> Invalid move (cell occupied). Try again.")
-                    continue
-                self.adapter.move_player(player, new_row, new_col)
-                self.apply_cell_effect(player)
-                break
-        elif choice == "2":
-            while True:
-                try:
-                    row = int(input("Row (0-4): ").strip())
-                    col = int(input("Col (0-4): ").strip())
-                except ValueError:
-                    print("  -> Invalid number. Try again.")
-                    continue
-                if self.adapter.place_trap(row, col):
-                    print("Trap placed!")
+        while True:  # re-prompt until valid choice 
+            choice = input("1.Move 2.Trap 3.Skip 4.Exit: ").strip()
+            if choice == "4":
+                self.outcome = "DRAW"
+                print("  -> You ended the game early. It's a draw!")
+                return
+            if choice == "1":
+                while True:
+                    direction = input("up/down/left/right? ").strip().lower()
+                    if direction == "up":
+                        new_row, new_col = player.row - 1, player.col
+                    elif direction == "down":
+                        new_row, new_col = player.row + 1, player.col
+                    elif direction == "left":
+                        new_row, new_col = player.row, player.col - 1
+                    elif direction == "right":
+                        new_row, new_col = player.row, player.col + 1
+                    else:
+                        print("  -> Invalid direction. Please enter up, down, left, or right.")
+                        continue
+                    if not self.adapter.is_valid(new_row, new_col):
+                        print("  -> Invalid move (out of map). Try again.")
+                        continue
+                    if self.grid.get_cell(new_row, new_col).occupant is not None:
+                        print("  -> Invalid move (cell occupied). Try again.")
+                        continue
+                    self.adapter.move_player(player, new_row, new_col)
+                    self.apply_cell_effect(player)
                     break
-                else:
-                    print("  -> Cannot place trap there (player/treasure/trap on cell). Try again.")
-        elif choice == "3":
-            print("You skip this turn.")
+                break
+            elif choice == "2":
+                while True:
+                    try:
+                        row = int(input("Row (0-4): ").strip())
+                        col = int(input("Col (0-4): ").strip())
+                    except ValueError:
+                        print("  -> Invalid number. Please enter 0-4 for row and col.")
+                        continue
+                    if self.adapter.place_trap(row, col):
+                        print("Trap placed!")
+                        break
+                    else:
+                        print("  -> Cannot place trap there (player/treasure/trap on cell). Try again.")
+                break
+            elif choice == "3":
+                print("You skip this turn.")
+                break
+            else:
+                print("  -> Invalid choice. Please enter 1, 2, 3, or 4.")
 
     def handle_input(self, player_input: str):
         if player_input == "1":
@@ -369,7 +380,7 @@ class TreasureTrapAdventure(MiniAdventure):
 
         result_msg = "DRAW" if self.outcome == "DRAW" else self.outcome
         print(f"Game over! {result_msg}")
-        # Save both profiles so inventory is persisted (viewable from main menu)
+        # save profiles so collected items show up in main menu inventory
         try:
             from profileManager import ProfileManager
             pm = ProfileManager()
