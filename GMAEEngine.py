@@ -1,8 +1,8 @@
 from typing import Optional
 
-from adventure import AdventureMenu, DictOfAdventureMenu
+from adventure import AdventureMenu
 from profileManager import ProfileManager
-from gameSession import GameSession
+# from gameSession import GameSession
 from playerProfile import PlayerProfile, NullPlayerProfile
 from user import User
 from RealmRegister import RealmRegister, RealmCoord
@@ -16,14 +16,14 @@ class GMAEEngine():
         self.UserManager = User()
         self.player1 = NullPlayerProfile()      # Introduce Null Object
         self.player2 = NullPlayerProfile()      # Introduce Null Object
-        self.DictOfAdventureMenu = DictOfAdventureMenu().AM_dictionary #key: Realm, value: AdventureMenu
+        # self.DictOfAdventureMenu = DictOfAdventureMenu().AM_dictionary #key: Realm, value: AdventureMenu
         self.currentMenu = AdventureMenu()
         self.profile_manager = ProfileManager()
-        self.session = Optional[GameSession]
+        # self.session = Optional[GameSession]
         
         self.realmReg = RealmRegister().realms
         self.currentRealm = self.realmReg[RealmCoord(0,0)] #Realms created in RealmRegister
-        self.DictOfAdventureMenu[self.currentRealm] = self.currentMenu
+        # self.DictOfAdventureMenu[self.currentRealm] = self.currentMenu
         
 
 
