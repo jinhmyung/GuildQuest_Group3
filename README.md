@@ -69,7 +69,7 @@ View Player Inventory:
 
 
 
-Player a mini Game:
+#Play a mini Game:
 
     STEP 1. login user 1 
     STEP 2. login user 2
@@ -85,7 +85,7 @@ Player a mini Game:
         what would you like to do? (enter 0 to end) : 1
 
 	# Inside Mobhunt MiniGame
-# select options to attack until monster is killed or player is killed and get
+	select options to attack until monster is killed or player is killed and get
 
 
 
@@ -95,8 +95,6 @@ Player a mini Game:
 	Step 1: login player 1 or player 2 depending on which players inventory you wish to view 
 	Ex. player 2’s inventory 
 	
-Player a mini Game:
-
     1. login user 1 
     2. login user 2
     3. MiniAdventure Menu 
