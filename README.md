@@ -2,8 +2,8 @@
 
 In order to start running: 
     Python main.py
-Change Realm’s to change miniGame difficulty/Monster:
-	All inputs are inside the green box in the google drive version we have images !!!
+# Change Realm’s to change miniGame difficulty/Monster:
+All inputs are inside the green box in the google drive version we have images !!!
 ---------------EXAMPLE-------------------
 
         ==============================
@@ -36,7 +36,7 @@ Change Realm’s to change miniGame difficulty/Monster:
         Entered Realm Successfully
 ------------END EXAMPLE----------------
 
-View Player Inventory: 
+# View Player Inventory: 
 	Step 1: login player 1 or player 2 depending on which players inventory you wish to view 
 	Ex. player 2’s inventory 
 
@@ -69,28 +69,7 @@ View Player Inventory:
 
 
 
-#Play a mini Game:
-
-    STEP 1. login user 1 
-    STEP 2. login user 2
-    STEP 3. MiniAdventure Menu 
-    example input: 
-        Choose: 2
-        Choose a username: ydureix
-        choose a password: something123
-        Choose: 3
-        Choose a username: Criminal
-        choose a password: crimes123
-        Choose: 4
-        what would you like to do? (enter 0 to end) : 1
-
-	# Inside Mobhunt MiniGame
-	select options to attack until monster is killed or player is killed and get
-
-
-
-
-# View Player Inventory: 
+# Play Mini Game: 
 
 	Step 1: login player 1 or player 2 depending on which players inventory you wish to view 
 	Ex. player 2’s inventory 
