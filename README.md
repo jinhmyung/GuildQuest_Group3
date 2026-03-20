@@ -90,7 +90,7 @@ Player a mini Game:
 
 
 
-View Player Inventory: 
+# View Player Inventory: 
 
 	Step 1: login player 1 or player 2 depending on which players inventory you wish to view 
 	Ex. player 2’s inventory 
@@ -110,7 +110,7 @@ Player a mini Game:
         Choose: 4
         what would you like to do? (enter 0 to end) : 1
 	# Inside Mobhunt MiniGame
-# select options to attack until monster is killed or player is killed and get
+	# select options to attack until monster is killed or player is killed and get
 
 ---------------EXAMPLE-------------------
 
@@ -165,5 +165,5 @@ Player a mini Game:
 
     It’s turn based so it will be player 1 then player2 then the monster until a player or the monster is dead. It is not possible to exit out of a game; it must be played till the end. 
 
-Exiting the Game: 
-    It’s possible to exit the game by entering 0 in GuildQuest CLI menu
+# Exiting the Game: 
+It’s possible to exit the game by entering 0 in GuildQuest CLI menu
